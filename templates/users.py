@@ -1,0 +1,288 @@
+"""
+User Directory & Role Assignment View (Admin-Governed Account Creation)
+"""
+from typing import List
+from templates.base import render_desk_base
+from core.rbac import get_role_label, get_role_badge, ROLES
+
+def render_desk_users(user: dict, users: List[dict], created_notice: bool = False, updated_notice: bool = False, reset_notice: bool = False) -> str:
+    is_admin = (user.get('role') == 'admin')
+
+    notice_html = ""
+    if created_notice:
+        notice_html = """
+        <div style="background: #DCFCE7; border: 1px solid #86EFAC; color: #166534; padding: 12px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 600; margin-bottom: 24px;">
+          ✓ New user account successfully created! The user can now authenticate with their assigned role.
+        </div>
+        """
+    elif updated_notice:
+        notice_html = """
+        <div style="background: #DCFCE7; border: 1px solid #86EFAC; color: #166534; padding: 12px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 600; margin-bottom: 24px;">
+          ✓ User account credentials, designation, and role permissions successfully updated.
+        </div>
+        """
+    elif reset_notice:
+        notice_html = """
+        <div style="background: #DCFCE7; border: 1px solid #86EFAC; color: #166534; padding: 12px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 600; margin-bottom: 24px;">
+          ✓ User password successfully reset by Administrator.
+        </div>
+        """
+
+    rows = ""
+    for u in users:
+        role = u.get('role', 'client')
+        status = u.get('status', 'Active')
+        status_cls = 'indicator-paid' if status == 'Active' else 'indicator-draft'
+
+        admin_actions = ""
+        if is_admin:
+            admin_actions = f"""
+            <div style="display: flex; gap: 6px; justify-content: flex-end;">
+              <button type="button" class="btn btn-outline btn-sm" onclick="openEditUserModal('{u.get('email')}', '{u.get('full_name')}', '{u.get('role')}', '{u.get('title', '')}', '{u.get('department', '')}', '{u.get('phone', '')}', '{status}')">
+                ✏️ Edit
+              </button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="openResetModal('{u.get('email')}', '{u.get('full_name')}')">
+                🔑 Reset Pwd
+              </button>
+            </div>
+            """
+
+        rows += f"""
+        <tr>
+          <td>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div class="desk-avatar" style="width: 32px; height: 32px; font-size: 13px;">{u.get('avatar', 'U')}</div>
+              <div>
+                <div style="font-weight: 700; color: #0F172A;">{u.get('full_name')}</div>
+                <div style="font-size: 12px; color: #64748B;">{u.get('email')}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="z-badge" style="background: var(--z-gold-light); color: var(--z-gold-dark); font-weight: 800;">
+              {get_role_badge(role)}
+            </span>
+          </td>
+          <td style="font-size: 12.5px; color: #334155; font-weight: 600;">{u.get('title', 'N/A')}</td>
+          <td style="font-size: 12.5px; color: #475569;">{u.get('department', 'Zureka Solutions')}</td>
+          <td style="font-size: 12.5px; color: #0F172A; font-weight: 600;">{u.get('phone', 'N/A')}</td>
+          <td>
+            <span class="indicator-pill {status_cls}">
+              <span class="indicator-dot"></span>
+              {status}
+            </span>
+          </td>
+          {f'<td style="text-align: right;">{admin_actions}</td>' if is_admin else ''}
+        </tr>
+        """
+
+    # Admin Modals
+    role_options = ""
+    for r_key, r_info in ROLES.items():
+        role_options += f"<option value='{r_key}'>{r_info['badge']} &bull; {r_info['name']}</option>"
+
+    create_user_modal = f"""
+    <!-- Create User Modal (Admin Exclusive) -->
+    <div id="createUserModal" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">Create User Account (System Administrator)</div>
+          <button class="modal-close" onclick="closeModal('createUserModal')">&times;</button>
+        </div>
+        <form action="/api/users" method="POST">
+          <div class="modal-body">
+            <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 8px; padding: 12px 16px; margin-bottom: 18px; font-size: 12.5px; color: #1E40AF;">
+              <strong>🛡️ Governance Notice:</strong> User accounts are strictly created and provisioned by the System Administrator. The user will be assigned permissions in the RBAC matrix according to their selected role.
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin-bottom: 16px;">
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Full Name *</label>
+                <input type="text" name="full_name" required placeholder="e.g. Sarah Nabwire" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Corporate Email *</label>
+                <input type="email" name="email" required placeholder="sarah@zurekasolutions.com" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Initial Password *</label>
+                <input type="password" name="password" required minlength="6" placeholder="••••••••" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Phone (for Pandora SMS) *</label>
+                <input type="text" name="phone" required placeholder="+256 772 000 000" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+              </div>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Assigned RBAC Role *</label>
+              <select name="role" required style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+                {role_options}
+              </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Job Title</label>
+                <input type="text" name="title" placeholder="e.g. Senior ERPNext Consultant" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Practice / Department</label>
+                <input type="text" name="department" placeholder="e.g. Enterprise Solutions Practice" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" onclick="closeModal('createUserModal')">Cancel</button>
+            <button type="submit" class="btn btn-gold">Create Account & Provision Role &rarr;</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Edit User Modal (Admin Exclusive) -->
+    <div id="editUserModal" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">Edit User Account & Role Assignment</div>
+          <button class="modal-close" onclick="closeModal('editUserModal')">&times;</button>
+        </div>
+        <form action="/api/users/update" method="POST">
+          <input type="hidden" id="editEmail" name="target_email">
+          <div class="modal-body">
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Account Email</label>
+              <input type="text" id="editEmailDisplay" readonly style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px; background: #F8FAFC; color: #64748B;">
+            </div>
+
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Full Name *</label>
+              <input type="text" id="editFullName" name="full_name" required style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin-bottom: 16px;">
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">RBAC Role *</label>
+                <select id="editRole" name="role" required style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+                  {role_options}
+                </select>
+              </div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Status *</label>
+                <select id="editStatus" name="status" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+                  <option value="Active">Active</option>
+                  <option value="Disabled">Disabled</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Job Title</label>
+                <input type="text" id="editTitle" name="title" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Department</label>
+                <input type="text" id="editDept" name="department" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+              </div>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Phone (SMS Alerts)</label>
+              <input type="text" id="editPhone" name="phone" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" onclick="closeModal('editUserModal')">Cancel</button>
+            <button type="submit" class="btn btn-gold">Save Changes &rarr;</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Reset Password Modal (Admin Exclusive) -->
+    <div id="resetPwdModal" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title">Reset User Password (Administrator)</div>
+          <button class="modal-close" onclick="closeModal('resetPwdModal')">&times;</button>
+        </div>
+        <form action="/api/users/reset-password" method="POST">
+          <input type="hidden" id="resetTargetEmail" name="target_email">
+          <div class="modal-body">
+            <div style="margin-bottom: 16px;">
+              <div style="font-size: 12px; color: #64748B;">Resetting password for:</div>
+              <div id="resetTargetDisplay" style="font-size: 15px; font-weight: 800; color: #0F172A; margin-top: 2px;"></div>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">New Temporary Password *</label>
+              <input type="password" name="new_password" required minlength="6" placeholder="••••••••" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" onclick="closeModal('resetPwdModal')">Cancel</button>
+            <button type="submit" class="btn btn-gold">Confirm Password Reset &rarr;</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+    function openEditUserModal(email, name, role, title, dept, phone, status) {{
+      document.getElementById('editEmail').value = email;
+      document.getElementById('editEmailDisplay').value = email;
+      document.getElementById('editFullName').value = name;
+      document.getElementById('editRole').value = role;
+      document.getElementById('editTitle').value = title;
+      document.getElementById('editDept').value = dept;
+      document.getElementById('editPhone').value = phone;
+      document.getElementById('editStatus').value = status;
+      openModal('editUserModal');
+    }}
+    function openResetModal(email, name) {{
+      document.getElementById('resetTargetEmail').value = email;
+      document.getElementById('resetTargetDisplay').innerText = name + ' (' + email + ')';
+      openModal('resetPwdModal');
+    }}
+    </script>
+    """ if is_admin else ""
+
+    content = f"""
+    <div class="erp-header">
+      <div>
+        <h1 class="erp-title">User Directory & Roles</h1>
+        <div class="erp-subtitle">System identity accounts, practice lead assignments, and RBAC governance</div>
+      </div>
+      <div class="erp-actions">
+        {f'<button class="btn btn-gold" onclick="openModal(\'createUserModal\')">+ Create User Account</button>' if is_admin else '<span style="font-size: 12.5px; color: #64748B;">Admin-governed provisioning</span>'}
+      </div>
+    </div>
+
+    {notice_html}
+
+    <div class="table-wrap">
+      <table class="z-table">
+        <thead>
+          <tr>
+            <th>User & Identity</th>
+            <th>RBAC Role</th>
+            <th>Title / Designation</th>
+            <th>Department / Practice</th>
+            <th>Phone</th>
+            <th>Status</th>
+            {f'<th style="text-align: right;">Admin Actions</th>' if is_admin else ''}
+          </tr>
+        </thead>
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
+    </div>
+
+    {create_user_modal}
+    """
+    return render_desk_base("User Directory", user, content, active_tab='users', breadcrumbs=[("Administration", None), ("User Directory", None)])

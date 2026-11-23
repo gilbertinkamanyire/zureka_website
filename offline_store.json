@@ -1,0 +1,1127 @@
+{
+  "users": [
+    {
+      "email": "admin@zurekasolutions.com",
+      "password_hash": "77747372fe378fdbb821ac0211cd0a5ba8795b62105e8272da5284060ae9a4be",
+      "full_name": "Dr. Arthur Ssewankambo",
+      "title": "Managing Partner & Executive Lead",
+      "role": "admin",
+      "department": "Executive Strategy & Governance",
+      "phone": "+256 773 245 712",
+      "avatar": "A",
+      "status": "Active"
+    },
+    {
+      "email": "erp.lead@zurekasolutions.com",
+      "password_hash": "7a43ab9e07c40e0be9fc2be360c602674660c6a9004cde1ef19f1e08e8444b65",
+      "full_name": "Eng. Brian Mukasa",
+      "title": "Practice Lead - Enterprise Solutions",
+      "role": "lead_erp",
+      "department": "Enterprise Solutions (ERPNext, Odoo, SAP B1)",
+      "phone": "+256 701 445 889",
+      "avatar": "B",
+      "status": "Active"
+    },
+    {
+      "email": "data.lead@zurekasolutions.com",
+      "password_hash": "7a43ab9e07c40e0be9fc2be360c602674660c6a9004cde1ef19f1e08e8444b65",
+      "full_name": "Fiona Atuhaire, MSc",
+      "title": "Practice Lead - Data, Intelligence & Innovation",
+      "role": "lead_data",
+      "department": "Data, Intelligence & Innovation (PostgreSQL, BI, AI)",
+      "phone": "+256 752 900 112",
+      "avatar": "F",
+      "status": "Active"
+    },
+    {
+      "email": "opex.lead@zurekasolutions.com",
+      "password_hash": "7a43ab9e07c40e0be9fc2be360c602674660c6a9004cde1ef19f1e08e8444b65",
+      "full_name": "Dennis Mugisha",
+      "title": "Practice Lead - Operational Excellence",
+      "role": "lead_opex",
+      "department": "Operational Excellence (BPR, SOPs & Governance)",
+      "phone": "+256 788 334 556",
+      "avatar": "D",
+      "status": "Active"
+    },
+    {
+      "email": "sales@zurekasolutions.com",
+      "password_hash": "7a43ab9e07c40e0be9fc2be360c602674660c6a9004cde1ef19f1e08e8444b65",
+      "full_name": "Patricia Namubiru",
+      "title": "Commercial Business Development Lead",
+      "role": "sales",
+      "department": "Commercial Partnerships & Sales",
+      "phone": "+256 772 112 344",
+      "avatar": "P",
+      "status": "Active"
+    },
+    {
+      "email": "finance@zurekasolutions.com",
+      "password_hash": "7a43ab9e07c40e0be9fc2be360c602674660c6a9004cde1ef19f1e08e8444b65",
+      "full_name": "Ronald Ssemakula, CPA",
+      "title": "Senior Finance & Accounts Officer",
+      "role": "finance",
+      "department": "Finance, Billing & Accounts",
+      "phone": "+256 700 889 900",
+      "avatar": "R",
+      "status": "Active"
+    },
+    {
+      "email": "client@victoriamfg.ug",
+      "password_hash": "3b153f8258b12e1299d26b9208f3fabc2196b8894f1fe2d5c831eef366a44073",
+      "full_name": "James Mukasa (Victoria Manufacturing)",
+      "title": "Managing Director (Client Enterprise)",
+      "role": "client",
+      "department": "Victoria Manufacturing Ltd",
+      "phone": "+256 701 445 889",
+      "avatar": "J",
+      "status": "Active"
+    },
+    {
+      "email": "sarah.consultant@zurekasolutions.com",
+      "password_hash": "ffac10f4b697f1bc47024d32c96c72b174ea65e8b3d6a5bd13bb0f68ff5f8cf7",
+      "full_name": "Sarah Nabwire",
+      "title": "Principal ERPNext Consultant",
+      "role": "lead_erp",
+      "department": "Enterprise Solutions Practice",
+      "phone": "+256 701 999 777",
+      "avatar": "S",
+      "status": "Active"
+    }
+  ],
+  "systems": [
+    {
+      "code": "SYS-ERP-01",
+      "name": "ERPNext Enterprise ERP System",
+      "category": "Enterprise Solutions",
+      "badge": "Tier-1 Platform",
+      "description": "One integrated platform for finance, sales, procurement, inventory, manufacturing, and projects, giving a single source of truth across the business.",
+      "features": [
+        "General Ledger, Accounts & Multi-Currency",
+        "Real-time Multi-Warehouse Inventory",
+        "Manufacturing BOM & Work Orders",
+        "Uganda Statutory Payroll & Projects"
+      ],
+      "db_engine": "PostgreSQL / MariaDB"
+    },
+    {
+      "code": "SYS-ERP-02",
+      "name": "Frappe Complete Application Suite",
+      "category": "Enterprise Solutions",
+      "badge": "Suite Deployment",
+      "description": "Deploy Frappe HR (leave, attendance, payroll), Frappe CRM (sales pipelines), Helpdesk (service tickets), Insights (BI), Drive (document storage), and Wiki.",
+      "features": [
+        "Frappe HR & Attendance Machines",
+        "Frappe CRM Pipeline Tracking",
+        "Frappe Helpdesk SLA Ticketing",
+        "Frappe Insights Self-Service BI"
+      ],
+      "db_engine": "PostgreSQL Architecture"
+    },
+    {
+      "code": "SYS-ERP-03",
+      "name": "Odoo Commercial ERP Implementation",
+      "category": "Enterprise Solutions",
+      "badge": "Modular Platform",
+      "description": "Enterprise implementation on Odoo: business process mapping, workflow optimization, integrated Point of Sale, and accounting.",
+      "features": [
+        "Dynamic Sales & Invoicing",
+        "Integrated Barcode POS",
+        "Inventory Reorder Automations",
+        "Thousands of Scalable Modules"
+      ],
+      "db_engine": "Native PostgreSQL"
+    },
+    {
+      "code": "SYS-ERP-04",
+      "name": "SAP Business One (SAP B1) Deployment",
+      "category": "Enterprise Solutions",
+      "badge": "Mid-Market Enterprise",
+      "description": "Specialized architecture, financial governance, multi-entity consolidation, and optimization for SAP Business One deployments.",
+      "features": [
+        "Strict Audit Trails & IFRS Compliance",
+        "Landed Costs & Procurement",
+        "Consolidated Financial Statements",
+        "Crystal Reports & Analytics"
+      ],
+      "db_engine": "SAP HANA / SQL"
+    },
+    {
+      "code": "SYS-ERP-05",
+      "name": "Bespoke Custom ERP System Development",
+      "category": "Enterprise Solutions",
+      "badge": "Proprietary Software",
+      "description": "Tailor-engineered proprietary ERP platform built from the ground up to match unique client operational workflows, custom schemas, and industry compliance.",
+      "features": [
+        "Bespoke PostgreSQL Database Schema",
+        "Custom Web & Mobile Interfaces",
+        "Hardware & Telephony Integration",
+        "Complete Source Code Ownership"
+      ],
+      "db_engine": "Pure PostgreSQL 16"
+    },
+    {
+      "code": "SYS-DATA-01",
+      "name": "Enterprise Data Strategy & Warehousing",
+      "category": "Data, Intelligence & Innovation",
+      "badge": "Data Foundation",
+      "description": "Building trusted data foundations, ETL pipelines, centralized modern data warehousing, and governance frameworks.",
+      "features": [
+        "PostgreSQL Enterprise Data Warehouse",
+        "Automated ETL Ingestion Pipelines",
+        "Data Cleansing & Validation",
+        "Governance & Master Data Management"
+      ],
+      "db_engine": "PostgreSQL 16 Cluster"
+    },
+    {
+      "code": "SYS-DATA-02",
+      "name": "Business Intelligence & Executive Dashboards",
+      "category": "Data, Intelligence & Innovation",
+      "badge": "BI & Analytics",
+      "description": "Interactive executive reporting, automated KPI tracking, scenario and sensitivity analysis, and self-service analytics.",
+      "features": [
+        "Executive Real-time Dashboards",
+        "Scenario & Sensitivity Modeling",
+        "Automated Email Scheduled Reports",
+        "Predictive Trend Analysis"
+      ],
+      "db_engine": "PostgreSQL / PowerBI"
+    },
+    {
+      "code": "SYS-DATA-03",
+      "name": "Artificial Intelligence & Intelligent Automation",
+      "category": "Data, Intelligence & Innovation",
+      "badge": "AI & Innovation",
+      "description": "AI-driven decision engines, predictive machine learning models, and automated robotic process workflows.",
+      "features": [
+        "Predictive Demand Forecasting",
+        "Intelligent Document Extraction",
+        "Automated Customer Chatbots",
+        "Workflow Auto-Triggers"
+      ],
+      "db_engine": "AI Models / PostgreSQL"
+    },
+    {
+      "code": "SYS-OPEX-01",
+      "name": "Digital Transformation & BPR Advisory",
+      "category": "Operational Excellence",
+      "badge": "Transformation",
+      "description": "Holistic transformation aligning strategy, people, processes, and technology. Process re-engineering and bottleneck elimination.",
+      "features": [
+        "As-Is vs. To-Be Process Mapping",
+        "Operational Bottleneck Elimination",
+        "Cross-Department Workflow Design",
+        "Change Enablement Roadmaps"
+      ],
+      "db_engine": "Advisory Delivery"
+    },
+    {
+      "code": "SYS-OPEX-02",
+      "name": "Standard Operating Procedures (SOPs) & Governance",
+      "category": "Operational Excellence",
+      "badge": "Governance",
+      "description": "Institutional SOP documentation, governance frameworks, operational internal controls, and target operating model definition.",
+      "features": [
+        "Role-based SOP Handbooks",
+        "Internal Approval Control Matrices",
+        "Compliance & Quality Standards",
+        "Policy Wiki Deployment"
+      ],
+      "db_engine": "Institutional Assets"
+    },
+    {
+      "code": "SYS-POS-01",
+      "name": "Retail & Supermarket POS System",
+      "category": "Specialized Systems",
+      "badge": "Retail & Trade",
+      "description": "High-speed cashier Point of Sale: barcode scanning, receipt printing, cash drawer integration, real-time stock deductions, and shift reconciliation.",
+      "features": [
+        "Multi-Till & Multi-Branch Syncing",
+        "Fast Barcode Search & Generation",
+        "Mobile Money & Card Payments",
+        "Offline Fault-Tolerant Cache"
+      ],
+      "db_engine": "PostgreSQL + Local Cache"
+    },
+    {
+      "code": "SYS-MED-01",
+      "name": "Hospital Management System (Frappe Health / HIMS)",
+      "category": "Specialized Systems",
+      "badge": "Healthcare",
+      "description": "Digitizing healthcare operations: patient registration, appointments, clinical records, doctor consultation, pharmacy dispensing, and medical billing.",
+      "features": [
+        "Electronic Medical Records (EMR)",
+        "IPD & OPD Ward Management",
+        "Pharmacy Stock & Expiry Controls",
+        "Health Insurance Invoicing"
+      ],
+      "db_engine": "Encrypted PostgreSQL"
+    },
+    {
+      "code": "SYS-EDU-01",
+      "name": "School & University Management System (SMS)",
+      "category": "Specialized Systems",
+      "badge": "Education",
+      "description": "Institutional academic software: student admissions, automated fee invoicing, gradebook, attendance, and parent SMS portal via Pandora Networks.",
+      "features": [
+        "Student Profiling & Enrollment",
+        "Automated Fee Billing & Bank Feeds",
+        "Exam Marks & PDF Report Cards",
+        "Parent SMS Broadcast Notifications"
+      ],
+      "db_engine": "PostgreSQL Cloud"
+    },
+    {
+      "code": "SYS-HR-01",
+      "name": "Automated HRMS & Biometric Payroll System",
+      "category": "Specialized Systems",
+      "badge": "Workforce",
+      "description": "End-to-end human resource software: Biometric attendance machine integration, leave workflows, Ugandan statutory deductions (PAYE, NSSF, LST), and payslips.",
+      "features": [
+        "ZKTeco & Face Biometric Machine Sync",
+        "Uganda Statutory PAYE & NSSF Rules",
+        "Automated Bank Net-Pay Files",
+        "Employee Self-Service Portal"
+      ],
+      "db_engine": "PostgreSQL Database"
+    },
+    {
+      "code": "SYS-PART-01",
+      "name": "Strategic Advisory & Board Retainer",
+      "category": "Transformation Partnership",
+      "badge": "Executive Advisory",
+      "description": "Long-term strategic guidance, board-level advisory, technology investment governance, and executive steering oversight.",
+      "features": [
+        "Monthly Steering Committee Review",
+        "Technology Investment Governance",
+        "Vendor Due-Diligence & Oversight",
+        "Executive Leadership Mentorship"
+      ],
+      "db_engine": "Advisory Retainer"
+    },
+    {
+      "code": "SYS-PART-02",
+      "name": "Systems Managed Support & SLA Retainer",
+      "category": "Transformation Partnership",
+      "badge": "Managed SLA",
+      "description": "Proactive application support, 99.9% database uptime monitoring, critical security patching, version upgrades, and user helpdesk.",
+      "features": [
+        "24/7 Priority Ticket Resolution",
+        "Daily Database Backup Verification",
+        "Security Patches & Version Upgrades",
+        "Continuous User Enablement"
+      ],
+      "db_engine": "PostgreSQL SLA"
+    }
+  ],
+  "clients": [
+    {
+      "id": 1,
+      "company_name": "Victoria Manufacturing Ltd",
+      "contact_person": "James Mukasa",
+      "email": "client@victoriamfg.ug",
+      "phone": "+256 701 445 889",
+      "industry": "Manufacturing",
+      "address": "Jinja Industrial Park, Uganda"
+    },
+    {
+      "id": 2,
+      "company_name": "Nile Crest Supermarkets",
+      "contact_person": "Sarah Namutebi",
+      "email": "sarah@nilecrest.co.ug",
+      "phone": "+256 772 312 900",
+      "industry": "Retail & Distribution",
+      "address": "Ntinda, Kampala, Uganda"
+    },
+    {
+      "id": 3,
+      "company_name": "Kampala Medicare Hospital",
+      "contact_person": "Dr. Peter Kigozi",
+      "email": "admin@kampalamedicare.org",
+      "phone": "+256 752 889 123",
+      "industry": "Healthcare",
+      "address": "Kololo, Kampala, Uganda"
+    },
+    {
+      "id": 4,
+      "company_name": "Apex Horizon College",
+      "contact_person": "Grace Nalubega",
+      "email": "bursar@apexhorizon.ac.ug",
+      "phone": "+256 788 123 456",
+      "industry": "Education",
+      "address": "Entebbe Road, Uganda"
+    }
+  ],
+  "quotations": [
+    {
+      "id": 1,
+      "quote_no": "QT-2026-001",
+      "client_name": "Victoria Manufacturing Ltd",
+      "client_email": "client@victoriamfg.ug",
+      "client_phone": "+256701445889",
+      "system_code": "SYS-ERP-01",
+      "system_name": "ERPNext Enterprise ERP System",
+      "scope_tier": "Full Enterprise Architecture",
+      "status": "Approved",
+      "docstatus": 1,
+      "notes": "Full manufacturing, multi-warehouse inventory, PostgreSQL database migration, and UAT.",
+      "created_at": "2026-11-20T10:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "quote_no": "QT-2026-002",
+      "client_name": "Nile Crest Supermarkets",
+      "client_email": "sarah@nilecrest.co.ug",
+      "client_phone": "+256772312900",
+      "system_code": "SYS-POS-01",
+      "system_name": "Retail & Supermarket POS System",
+      "scope_tier": "3-Branch Retail POS Deployment",
+      "status": "Submitted",
+      "docstatus": 1,
+      "notes": "Fast cashier checkout, barcode scanner sync, and central head-office inventory.",
+      "created_at": "2026-11-22T14:30:00.000Z"
+    },
+    {
+      "id": 3,
+      "quote_no": "QT-2026-003",
+      "client_name": "Kampala Medicare Hospital",
+      "client_email": "admin@kampalamedicare.org",
+      "client_phone": "+256752889123",
+      "system_code": "SYS-MED-01",
+      "system_name": "Hospital Management System (Frappe Health / HIMS)",
+      "scope_tier": "EMR, Inpatient & Outpatient Suite",
+      "status": "Draft",
+      "docstatus": 0,
+      "notes": "Doctor consultation module, pharmacy dispensing controls, and health insurance billing.",
+      "created_at": "2026-11-23T08:15:00.000Z"
+    }
+  ],
+  "invoices": [
+    {
+      "id": 1,
+      "invoice_no": "ACC-SINV-2026-001",
+      "client_name": "Victoria Manufacturing Ltd",
+      "system_name": "ERPNext Enterprise ERP System - Milestone 1",
+      "status": "Paid",
+      "docstatus": 1,
+      "payment_terms": "Milestone Delivery (Discover & Design Signed Off)",
+      "created_at": "2026-11-21T09:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "invoice_no": "ACC-SINV-2026-002",
+      "client_name": "Nile Crest Supermarkets",
+      "system_name": "Retail POS Hardware & License Setup",
+      "status": "Unpaid",
+      "docstatus": 1,
+      "payment_terms": "Net 15 Days",
+      "created_at": "2026-11-22T16:00:00.000Z"
+    },
+    {
+      "invoice_no": "ZUR-INV-2026-0003",
+      "date": "2026-11-23",
+      "due_date": "2026-11-23",
+      "client_name": "Victoria Manufacturing Ltd",
+      "client_email": "accounts@victoriamfg.ug",
+      "client_tin": "1000293847",
+      "quotation_ref": "N/A",
+      "description": "ERPNext Multi-Plant Manufacturing Rollout (Phase 1)",
+      "items": [
+        {
+          "item_code": "SRV-CONSULTING",
+          "description": "ERPNext Multi-Plant Manufacturing Rollout (Phase 1)",
+          "qty": 1,
+          "rate": 50000000.0,
+          "amount": 50000000.0
+        }
+      ],
+      "currency": "UGX",
+      "subtotal": 50000000.0,
+      "vat_amount": 9000000.0,
+      "grand_total": 59000000.0,
+      "paid_amount": 59000000.0,
+      "outstanding_amount": 0.0,
+      "status": "Paid",
+      "docstatus": "Submitted",
+      "efris_fdn": "ZUR-EFRIS-2026-000003",
+      "payment_terms": "Net 30 Days from Milestone Verification"
+    },
+    {
+      "invoice_no": "ZUR-INV-2026-0004",
+      "date": "2026-11-23",
+      "due_date": "2026-11-23",
+      "client_name": "Victoria Manufacturing Ltd",
+      "client_email": "client@victoriamfg.ug",
+      "client_tin": "1000293847",
+      "quotation_ref": "QT-2026-001",
+      "description": "Phase 1 Mobilization & Deployment: ERPNext Enterprise ERP System",
+      "items": [
+        {
+          "item_code": "SRV-CONSULTING",
+          "description": "Phase 1 Mobilization & Deployment: ERPNext Enterprise ERP System",
+          "qty": 1,
+          "rate": 18000000.0,
+          "amount": 18000000.0
+        }
+      ],
+      "currency": "UGX",
+      "subtotal": 18000000.0,
+      "vat_amount": 3240000.0,
+      "grand_total": 21240000.0,
+      "paid_amount": 0.0,
+      "outstanding_amount": 21240000.0,
+      "status": "Unpaid",
+      "docstatus": "Submitted",
+      "efris_fdn": "ZUR-EFRIS-2026-000004",
+      "payment_terms": "Net 30 Days from Milestone Verification"
+    },
+    {
+      "invoice_no": "ZUR-INV-2026-0005",
+      "date": "2026-11-23",
+      "due_date": "2026-11-23",
+      "client_name": "Victoria Manufacturing Ltd",
+      "client_email": "accounts@victoriamfg.ug",
+      "client_tin": "1000293847",
+      "quotation_ref": "N/A",
+      "description": "ERPNext Multi-Plant Manufacturing Rollout (Phase 1)",
+      "items": [
+        {
+          "item_code": "SRV-CONSULTING",
+          "description": "ERPNext Multi-Plant Manufacturing Rollout (Phase 1)",
+          "qty": 1,
+          "rate": 50000000.0,
+          "amount": 50000000.0
+        }
+      ],
+      "currency": "UGX",
+      "subtotal": 50000000.0,
+      "vat_amount": 9000000.0,
+      "grand_total": 59000000.0,
+      "paid_amount": 59000000.0,
+      "outstanding_amount": 0.0,
+      "status": "Paid",
+      "docstatus": "Submitted",
+      "efris_fdn": "ZUR-EFRIS-2026-000005",
+      "payment_terms": "Net 30 Days from Milestone Verification"
+    },
+    {
+      "invoice_no": "ZUR-INV-2026-0006",
+      "date": "2026-11-23",
+      "due_date": "2026-11-23",
+      "client_name": "Victoria Manufacturing Ltd",
+      "client_email": "client@victoriamfg.ug",
+      "client_tin": "1000293847",
+      "quotation_ref": "QT-2026-001",
+      "description": "Phase 1 Mobilization & Deployment: ERPNext Enterprise ERP System",
+      "items": [
+        {
+          "item_code": "SRV-CONSULTING",
+          "description": "Phase 1 Mobilization & Deployment: ERPNext Enterprise ERP System",
+          "qty": 1,
+          "rate": 18000000.0,
+          "amount": 18000000.0
+        }
+      ],
+      "currency": "UGX",
+      "subtotal": 18000000.0,
+      "vat_amount": 3240000.0,
+      "grand_total": 21240000.0,
+      "paid_amount": 0.0,
+      "outstanding_amount": 21240000.0,
+      "status": "Unpaid",
+      "docstatus": "Submitted",
+      "efris_fdn": "ZUR-EFRIS-2026-000006",
+      "payment_terms": "Net 30 Days from Milestone Verification"
+    },
+    {
+      "invoice_no": "ZUR-INV-2026-0007",
+      "date": "2026-11-23",
+      "due_date": "2026-11-27",
+      "client_name": "Gilbert",
+      "client_email": "gilbertinkamanyire@gmail.com",
+      "client_tin": "1000293847",
+      "quotation_ref": "24564fcf",
+      "description": "Phase 1",
+      "items": [
+        {
+          "item_code": "SRV-CONSULTING",
+          "description": "Phase 1",
+          "qty": 1,
+          "rate": 25000000.0,
+          "amount": 25000000.0
+        }
+      ],
+      "currency": "UGX",
+      "subtotal": 25000000.0,
+      "vat_amount": 4500000.0,
+      "grand_total": 29500000.0,
+      "paid_amount": 200000.0,
+      "outstanding_amount": 29300000.0,
+      "status": "Unpaid",
+      "docstatus": "Submitted",
+      "efris_fdn": "ZUR-EFRIS-2026-000007",
+      "payment_terms": "Net 30 Days from Milestone Verification"
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "project_name": "Victoria Manufacturing ERP Rollout",
+      "client_name": "Victoria Manufacturing Ltd",
+      "framework_stage": "Configuration & Testing",
+      "lead_partner": "Eng. Brian Mukasa",
+      "status": "Configuration & Testing",
+      "milestone": "Chart of accounts and payroll formulas configured",
+      "completion_pct": 65,
+      "current_milestone": "Chart of accounts and payroll formulas configured"
+    },
+    {
+      "id": 2,
+      "project_name": "Nile Crest POS & Inventory Modernization",
+      "client_name": "Nile Crest Supermarkets",
+      "framework_stage": "02 Design",
+      "lead_partner": "Patricia Namubiru",
+      "status": "Active",
+      "milestone": "Store Network Topology & Barcode Setup"
+    },
+    {
+      "id": 3,
+      "project_name": "Kampala Medicare Digital Health Audit",
+      "client_name": "Kampala Medicare Hospital",
+      "framework_stage": "01 Discover",
+      "lead_partner": "Dennis Mugisha",
+      "status": "Discovery",
+      "milestone": "Departmental Clinical Workflow Assessment"
+    },
+    {
+      "code": "PRJ-004",
+      "name": "Implementation: ERPNext Enterprise ERP System for Victoria Manufacturing Ltd",
+      "client_name": "Victoria Manufacturing Ltd",
+      "client_email": "client@victoriamfg.ug",
+      "practice_lead": "Eng. Brian Mukasa",
+      "status": "Planning & Discovery",
+      "completion_pct": 15,
+      "current_milestone": "Discovery & Process Mapping"
+    },
+    {
+      "code": "PRJ-005",
+      "id": "PRJ-005",
+      "name": "Implementation: ERPNext Enterprise ERP System for Victoria Manufacturing Ltd",
+      "project_name": "Implementation: ERPNext Enterprise ERP System for Victoria Manufacturing Ltd",
+      "client_name": "Victoria Manufacturing Ltd",
+      "client_email": "client@victoriamfg.ug",
+      "practice_lead": "Eng. Brian Mukasa",
+      "lead_partner": "Eng. Brian Mukasa",
+      "status": "Planning & Discovery",
+      "framework_stage": "Planning & Discovery",
+      "completion_pct": 15,
+      "current_milestone": "Discovery & Process Mapping",
+      "milestone": "Discovery & Process Mapping"
+    }
+  ],
+  "inquiries": [],
+  "coa": [
+    {
+      "account_number": "1110",
+      "account_name": "Stanbic Bank Uganda (UGX Operating)",
+      "root_type": "Asset",
+      "account_type": "Bank",
+      "balance": 303200000.0
+    },
+    {
+      "account_number": "1120",
+      "account_name": "MTN Mobile Money Corporate Merchant",
+      "root_type": "Asset",
+      "account_type": "Bank",
+      "balance": 34200000
+    },
+    {
+      "account_number": "1200",
+      "account_name": "Accounts Receivable (Debtors)",
+      "root_type": "Asset",
+      "account_type": "Receivable",
+      "balance": 164280000.0
+    },
+    {
+      "account_number": "2100",
+      "account_name": "Accounts Payable (Creditors)",
+      "root_type": "Liability",
+      "account_type": "Payable",
+      "balance": 24000000
+    },
+    {
+      "account_number": "2210",
+      "account_name": "URA VAT Payable (18%)",
+      "root_type": "Liability",
+      "account_type": "Tax",
+      "balance": 45630000.0
+    },
+    {
+      "account_number": "2220",
+      "account_name": "Withholding Tax (WHT 6%) Payable",
+      "root_type": "Liability",
+      "account_type": "Tax",
+      "balance": 5550000
+    },
+    {
+      "account_number": "3100",
+      "account_name": "Partner Capital & Retained Earnings",
+      "root_type": "Equity",
+      "account_type": "Equity",
+      "balance": 200000000
+    },
+    {
+      "account_number": "4100",
+      "account_name": "ERPNext Implementation & Consulting Revenue",
+      "root_type": "Income",
+      "account_type": "Direct Income",
+      "balance": 481000000.0
+    },
+    {
+      "account_number": "4200",
+      "account_name": "Data, AI & Business Intelligence Revenue",
+      "root_type": "Income",
+      "account_type": "Direct Income",
+      "balance": 145000000
+    },
+    {
+      "account_number": "4300",
+      "account_name": "Annual SLA Support & Cloud Hosting Revenue",
+      "root_type": "Income",
+      "account_type": "Direct Income",
+      "balance": 78000000
+    },
+    {
+      "account_number": "5100",
+      "account_name": "Cloud Infrastructure & Server Hosting Expense",
+      "root_type": "Expense",
+      "account_type": "Direct Expense",
+      "balance": 42000000
+    },
+    {
+      "account_number": "5200",
+      "account_name": "Specialist Delivery & Engineering Compensation",
+      "root_type": "Expense",
+      "account_type": "Direct Expense",
+      "balance": 115000000
+    }
+  ],
+  "gl_entries": [
+    {
+      "id": "GL-000021",
+      "posting_date": "2026-11-23",
+      "account": "Accounts Receivable (Debtors)",
+      "debit": 0.0,
+      "credit": 200000.0,
+      "voucher_type": "Payment Entry",
+      "voucher_no": "ZUR-PAY-2026-0003",
+      "against_account": "Stanbic Bank Uganda (UGX Operating)",
+      "remarks": "Receivable cleared for ZUR-INV-2026-0007 via ZUR-PAY-2026-0003"
+    },
+    {
+      "id": "GL-000020",
+      "posting_date": "2026-11-23",
+      "account": "Stanbic Bank Uganda (UGX Operating)",
+      "debit": 200000.0,
+      "credit": 0.0,
+      "voucher_type": "Payment Entry",
+      "voucher_no": "ZUR-PAY-2026-0003",
+      "against_account": "Accounts Receivable (Debtors)",
+      "remarks": "Payment received from Gilbert against ZUR-INV-2026-0007"
+    },
+    {
+      "id": "GL-000019",
+      "posting_date": "2026-11-23",
+      "account": "URA VAT Payable (18%)",
+      "debit": 0.0,
+      "credit": 4500000.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0007",
+      "against_account": "Accounts Receivable (Debtors)",
+      "remarks": "URA Output VAT recognized 18% (ZUR-INV-2026-0007)"
+    },
+    {
+      "id": "GL-000018",
+      "posting_date": "2026-11-23",
+      "account": "ERPNext Implementation & Consulting Revenue",
+      "debit": 0.0,
+      "credit": 25000000.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0007",
+      "against_account": "Accounts Receivable (Debtors)",
+      "remarks": "Consulting revenue recognized (ZUR-INV-2026-0007)"
+    },
+    {
+      "id": "GL-000017",
+      "posting_date": "2026-11-23",
+      "account": "Accounts Receivable (Debtors)",
+      "debit": 29500000.0,
+      "credit": 0.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0007",
+      "against_account": "ERPNext Implementation & Consulting Revenue",
+      "remarks": "Receivable booked for Gilbert (ZUR-INV-2026-0007)"
+    },
+    {
+      "id": "GL-000016",
+      "posting_date": "2026-11-23",
+      "account": "URA VAT Payable (18%)",
+      "debit": 0.0,
+      "credit": 3240000.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0006",
+      "against_account": "Accounts Receivable (Debtors)",
+      "remarks": "URA Output VAT recognized 18% (ZUR-INV-2026-0006)"
+    },
+    {
+      "id": "GL-000015",
+      "posting_date": "2026-11-23",
+      "account": "ERPNext Implementation & Consulting Revenue",
+      "debit": 0.0,
+      "credit": 18000000.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0006",
+      "against_account": "Accounts Receivable (Debtors)",
+      "remarks": "Consulting revenue recognized (ZUR-INV-2026-0006)"
+    },
+    {
+      "id": "GL-000014",
+      "posting_date": "2026-11-23",
+      "account": "Accounts Receivable (Debtors)",
+      "debit": 21240000.0,
+      "credit": 0.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0006",
+      "against_account": "ERPNext Implementation & Consulting Revenue",
+      "remarks": "Receivable booked for Victoria Manufacturing Ltd (ZUR-INV-2026-0006)"
+    },
+    {
+      "id": "GL-000013",
+      "posting_date": "2026-11-23",
+      "account": "Accounts Receivable (Debtors)",
+      "debit": 0.0,
+      "credit": 59000000.0,
+      "voucher_type": "Payment Entry",
+      "voucher_no": "ZUR-PAY-2026-0002",
+      "against_account": "Stanbic Bank Uganda (UGX Operating)",
+      "remarks": "Receivable cleared for ZUR-INV-2026-0005 via ZUR-PAY-2026-0002"
+    },
+    {
+      "id": "GL-000012",
+      "posting_date": "2026-11-23",
+      "account": "Stanbic Bank Uganda (UGX Operating)",
+      "debit": 59000000.0,
+      "credit": 0.0,
+      "voucher_type": "Payment Entry",
+      "voucher_no": "ZUR-PAY-2026-0002",
+      "against_account": "Accounts Receivable (Debtors)",
+      "remarks": "Payment received from Victoria Manufacturing Ltd against ZUR-INV-2026-0005"
+    },
+    {
+      "id": "GL-000011",
+      "posting_date": "2026-11-23",
+      "account": "URA VAT Payable (18%)",
+      "debit": 0.0,
+      "credit": 9000000.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0005",
+      "against_account": "Accounts Receivable (Debtors)",
+      "remarks": "URA Output VAT recognized 18% (ZUR-INV-2026-0005)"
+    },
+    {
+      "id": "GL-000010",
+      "posting_date": "2026-11-23",
+      "account": "ERPNext Implementation & Consulting Revenue",
+      "debit": 0.0,
+      "credit": 50000000.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0005",
+      "against_account": "Accounts Receivable (Debtors)",
+      "remarks": "Consulting revenue recognized (ZUR-INV-2026-0005)"
+    },
+    {
+      "id": "GL-000009",
+      "posting_date": "2026-11-23",
+      "account": "Accounts Receivable (Debtors)",
+      "debit": 59000000.0,
+      "credit": 0.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0005",
+      "against_account": "ERPNext Implementation & Consulting Revenue",
+      "remarks": "Receivable booked for Victoria Manufacturing Ltd (ZUR-INV-2026-0005)"
+    },
+    {
+      "id": "GL-000008",
+      "posting_date": "2026-11-23",
+      "account": "URA VAT Payable (18%)",
+      "debit": 0.0,
+      "credit": 3240000.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0004",
+      "against_account": "Accounts Receivable (Debtors)",
+      "remarks": "URA Output VAT recognized 18% (ZUR-INV-2026-0004)"
+    },
+    {
+      "id": "GL-000007",
+      "posting_date": "2026-11-23",
+      "account": "ERPNext Implementation & Consulting Revenue",
+      "debit": 0.0,
+      "credit": 18000000.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0004",
+      "against_account": "Accounts Receivable (Debtors)",
+      "remarks": "Consulting revenue recognized (ZUR-INV-2026-0004)"
+    },
+    {
+      "id": "GL-000006",
+      "posting_date": "2026-11-23",
+      "account": "Accounts Receivable (Debtors)",
+      "debit": 21240000.0,
+      "credit": 0.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0004",
+      "against_account": "ERPNext Implementation & Consulting Revenue",
+      "remarks": "Receivable booked for Victoria Manufacturing Ltd (ZUR-INV-2026-0004)"
+    },
+    {
+      "id": "GL-000005",
+      "posting_date": "2026-11-23",
+      "account": "Accounts Receivable (Debtors)",
+      "debit": 0.0,
+      "credit": 59000000.0,
+      "voucher_type": "Payment Entry",
+      "voucher_no": "ZUR-PAY-2026-0001",
+      "against_account": "Stanbic Bank Uganda (UGX Operating)",
+      "remarks": "Receivable cleared for ZUR-INV-2026-0003 via ZUR-PAY-2026-0001"
+    },
+    {
+      "id": "GL-000004",
+      "posting_date": "2026-11-23",
+      "account": "Stanbic Bank Uganda (UGX Operating)",
+      "debit": 59000000.0,
+      "credit": 0.0,
+      "voucher_type": "Payment Entry",
+      "voucher_no": "ZUR-PAY-2026-0001",
+      "against_account": "Accounts Receivable (Debtors)",
+      "remarks": "Payment received from Victoria Manufacturing Ltd against ZUR-INV-2026-0003"
+    },
+    {
+      "id": "GL-000003",
+      "posting_date": "2026-11-23",
+      "account": "URA VAT Payable (18%)",
+      "debit": 0.0,
+      "credit": 9000000.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0003",
+      "against_account": "Accounts Receivable (Debtors)",
+      "remarks": "URA Output VAT recognized 18% (ZUR-INV-2026-0003)"
+    },
+    {
+      "id": "GL-000002",
+      "posting_date": "2026-11-23",
+      "account": "ERPNext Implementation & Consulting Revenue",
+      "debit": 0.0,
+      "credit": 50000000.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0003",
+      "against_account": "Accounts Receivable (Debtors)",
+      "remarks": "Consulting revenue recognized (ZUR-INV-2026-0003)"
+    },
+    {
+      "id": "GL-000001",
+      "posting_date": "2026-11-23",
+      "account": "Accounts Receivable (Debtors)",
+      "debit": 59000000.0,
+      "credit": 0.0,
+      "voucher_type": "Sales Invoice",
+      "voucher_no": "ZUR-INV-2026-0003",
+      "against_account": "ERPNext Implementation & Consulting Revenue",
+      "remarks": "Receivable booked for Victoria Manufacturing Ltd (ZUR-INV-2026-0003)"
+    }
+  ],
+  "payments": [
+    {
+      "payment_no": "ZUR-PAY-2026-0003",
+      "date": "2026-11-23",
+      "invoice_no": "ZUR-INV-2026-0007",
+      "client_name": "Gilbert",
+      "client_email": "gilbertinkamanyire@gmail.com",
+      "amount": 200000.0,
+      "mode_of_payment": "Bank Transfer (Stanbic Bank Uganda)",
+      "reference_no": "fgvfvrev",
+      "received_by": "finance@zurekasolutions.com"
+    },
+    {
+      "payment_no": "ZUR-PAY-2026-0002",
+      "date": "2026-11-23",
+      "invoice_no": "ZUR-INV-2026-0005",
+      "client_name": "Victoria Manufacturing Ltd",
+      "client_email": "accounts@victoriamfg.ug",
+      "amount": 59000000.0,
+      "mode_of_payment": "Bank Transfer (Stanbic Bank Uganda)",
+      "reference_no": "STANBIC-FT-2026-9921",
+      "received_by": "finance@zurekasolutions.com"
+    },
+    {
+      "payment_no": "ZUR-PAY-2026-0001",
+      "date": "2026-11-23",
+      "invoice_no": "ZUR-INV-2026-0003",
+      "client_name": "Victoria Manufacturing Ltd",
+      "client_email": "accounts@victoriamfg.ug",
+      "amount": 59000000.0,
+      "mode_of_payment": "Bank Transfer (Stanbic Bank Uganda)",
+      "reference_no": "STANBIC-FT-2026-9921",
+      "received_by": "finance@zurekasolutions.com"
+    }
+  ],
+  "activity_logs": [
+    {
+      "id": "ACT-00021",
+      "timestamp": "2026-11-23 16:07:18",
+      "user_email": "finance@zurekasolutions.com",
+      "action": "Payment Received",
+      "details": "Received UGX 200,000 for ZUR-INV-2026-0007 (ZUR-PAY-2026-0003)"
+    },
+    {
+      "id": "ACT-00020",
+      "timestamp": "2026-11-23 16:06:31",
+      "user_email": "finance@zurekasolutions.com",
+      "action": "Invoice Created",
+      "details": "Issued Sales Invoice ZUR-INV-2026-0007 for UGX 29,500,000"
+    },
+    {
+      "id": "ACT-00019",
+      "timestamp": "2026-11-23 16:04:10",
+      "user_email": "finance@zurekasolutions.com",
+      "action": "User Signed In",
+      "details": "User Ronald Ssemakula, CPA (finance) authenticated successfully."
+    },
+    {
+      "id": "ACT-00018",
+      "timestamp": "2026-11-23 16:03:51",
+      "user_email": "erp.lead@zurekasolutions.com",
+      "action": "User Signed In",
+      "details": "User Eng. Brian Mukasa (lead_erp) authenticated successfully."
+    },
+    {
+      "id": "ACT-00017",
+      "timestamp": "2026-11-23 16:02:39",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "User Signed In",
+      "details": "User Dr. Arthur Ssewankambo (admin) authenticated successfully."
+    },
+    {
+      "id": "ACT-00016",
+      "timestamp": "2026-11-23 15:59:16",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "User Signed In",
+      "details": "User Dr. Arthur Ssewankambo (admin) authenticated successfully."
+    },
+    {
+      "id": "ACT-00015",
+      "timestamp": "2026-11-23 15:56:34",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "Password Reset by Admin",
+      "details": "Administrator reset password credentials for sarah.consultant@zurekasolutions.com"
+    },
+    {
+      "id": "ACT-00014",
+      "timestamp": "2026-11-23 15:56:34",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "User Account Updated",
+      "details": "Administrator modified account profile for sarah.consultant@zurekasolutions.com (Role: lead_erp)"
+    },
+    {
+      "id": "ACT-00013",
+      "timestamp": "2026-11-23 15:56:34",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "User Account Created",
+      "details": "Administrator created new user account sarah.consultant@zurekasolutions.com (Role: lead_erp)"
+    },
+    {
+      "id": "ACT-00012",
+      "timestamp": "2026-11-23 15:54:11",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "User Signed In",
+      "details": "User Dr. Arthur Ssewankambo (admin) authenticated successfully."
+    },
+    {
+      "id": "ACT-00011",
+      "timestamp": "2026-11-23 15:53:07",
+      "user_email": "client@victoriamfg.ug",
+      "action": "User Signed In",
+      "details": "User James Mukasa (Victoria Manufacturing) (client) authenticated successfully."
+    },
+    {
+      "id": "ACT-00010",
+      "timestamp": "2026-11-23 15:52:07",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "Password Changed",
+      "details": "Security credential updated for admin@zurekasolutions.com"
+    },
+    {
+      "id": "ACT-00009",
+      "timestamp": "2026-11-23 15:52:07",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "Profile Updated",
+      "details": "Personal profile and contact info updated for admin@zurekasolutions.com"
+    },
+    {
+      "id": "ACT-00008",
+      "timestamp": "2026-11-23 15:47:02",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "User Signed In",
+      "details": "User Dr. Arthur Ssewankambo (admin) authenticated successfully."
+    },
+    {
+      "id": "ACT-00007",
+      "timestamp": "2026-11-23 15:42:53",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "Project Updated",
+      "details": "Project 1 updated to 65% (Configuration & Testing)"
+    },
+    {
+      "id": "ACT-00006",
+      "timestamp": "2026-11-23 15:42:53",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "Project Initiated",
+      "details": "Initiated delivery project PRJ-005 from proposal QT-2026-001"
+    },
+    {
+      "id": "ACT-00005",
+      "timestamp": "2026-11-23 15:42:53",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "Invoice Generated",
+      "details": "Created milestone invoice ZUR-INV-2026-0006 from proposal QT-2026-001"
+    },
+    {
+      "id": "ACT-00004",
+      "timestamp": "2026-11-23 15:42:53",
+      "user_email": "finance@zurekasolutions.com",
+      "action": "Payment Received",
+      "details": "Received UGX 59,000,000 for ZUR-INV-2026-0005 (ZUR-PAY-2026-0002)"
+    },
+    {
+      "id": "ACT-00003",
+      "timestamp": "2026-11-23 15:41:30",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "Project Initiated",
+      "details": "Initiated delivery project PRJ-004 from proposal QT-2026-001"
+    },
+    {
+      "id": "ACT-00002",
+      "timestamp": "2026-11-23 15:41:30",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "Invoice Generated",
+      "details": "Created milestone invoice ZUR-INV-2026-0004 from proposal QT-2026-001"
+    },
+    {
+      "id": "ACT-00001",
+      "timestamp": "2026-11-23 15:41:29",
+      "user_email": "finance@zurekasolutions.com",
+      "action": "Payment Received",
+      "details": "Received UGX 59,000,000 for ZUR-INV-2026-0003 (ZUR-PAY-2026-0001)"
+    }
+  ]
+}
