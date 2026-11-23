@@ -977,6 +977,13 @@
   ],
   "activity_logs": [
     {
+      "id": "ACT-00022",
+      "timestamp": "2026-11-23 16:28:58",
+      "user_email": "data.lead@zurekasolutions.com",
+      "action": "User Signed In",
+      "details": "User Fiona Atuhaire, MSc (lead_data) authenticated successfully."
+    },
+    {
       "id": "ACT-00021",
       "timestamp": "2026-11-23 16:07:18",
       "user_email": "finance@zurekasolutions.com",
