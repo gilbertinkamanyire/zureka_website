@@ -1,5 +1,6 @@
 """
-Data Layer & Offline JSON Store with ERP Accounting & General Ledger
+Data Layer – Dual-Mode Storage Engine
+PostgreSQL (when DATABASE_URL is set) with automatic JSON fallback for local/offline dev.
 """
 import os
 import json
@@ -8,6 +9,21 @@ from typing import List, Dict, Any, Optional
 
 import config
 from core.auth import hash_password
+
+# ─── PostgreSQL Dual-Mode Dispatch ───
+# Import lazily to avoid crashing if psycopg2 is not installed
+try:
+    from core import postgres as _pg
+except Exception:
+    _pg = None  # type: ignore
+
+
+def _use_pg() -> bool:
+    """Return True when PostgreSQL is configured and psycopg2 is available."""
+    return _pg is not None and _pg.is_postgres_enabled()
+
+
+# ─── Default Chart of Accounts ───
 
 DEFAULT_COA = [
     {"account_number": "1110", "account_name": "Stanbic Bank Uganda (UGX Operating)", "root_type": "Asset", "account_type": "Bank", "balance": 185000000},
@@ -23,6 +39,8 @@ DEFAULT_COA = [
     {"account_number": "5100", "account_name": "Cloud Infrastructure & Server Hosting Expense", "root_type": "Expense", "account_type": "Direct Expense", "balance": 42000000},
     {"account_number": "5200", "account_name": "Specialist Delivery & Engineering Compensation", "root_type": "Expense", "account_type": "Direct Expense", "balance": 115000000}
 ]
+
+# ─── JSON File Helpers ───
 
 def _load_data() -> dict:
     if os.path.exists(config.DATA_FILE):
@@ -50,11 +68,18 @@ def _load_data() -> dict:
         "activity_logs": []
     }
 
+
 def _save_data(data: dict) -> None:
     with open(config.DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2)
 
+
+# ─── ACTIVITY LOGS ───
+
 def log_activity(user_email: str, action: str, details: str) -> None:
+    if _use_pg():
+        _pg.pg_log_activity(user_email, action, details)
+        return
     data = _load_data()
     data.setdefault('activity_logs', []).insert(0, {
         "id": f"ACT-{len(data.get('activity_logs', [])) + 1:05d}",
@@ -65,13 +90,19 @@ def log_activity(user_email: str, action: str, details: str) -> None:
     })
     _save_data(data)
 
+
 def get_activity_logs(limit: int = 20) -> List[dict]:
+    if _use_pg():
+        return _pg.pg_get_activity_logs(limit)
     data = _load_data()
     return data.get('activity_logs', [])[:limit]
+
 
 # ─── AUTHENTICATION & USERS ───
 
 def authenticate_user(email: str, password: str) -> Optional[dict]:
+    if _use_pg():
+        return _pg.pg_authenticate_user(email, hash_password(password))
     data = _load_data()
     hashed = hash_password(password)
     for u in data.get('users', []):
@@ -82,7 +113,10 @@ def authenticate_user(email: str, password: str) -> Optional[dict]:
                 return uc
     return None
 
+
 def get_all_users() -> List[dict]:
+    if _use_pg():
+        return _pg.pg_get_all_users()
     data = _load_data()
     users = []
     for u in data.get('users', []):
@@ -91,7 +125,10 @@ def get_all_users() -> List[dict]:
         users.append(uc)
     return users
 
+
 def get_user_by_email(email: str) -> Optional[dict]:
+    if _use_pg():
+        return _pg.pg_get_user_by_email(email)
     data = _load_data()
     for u in data.get('users', []):
         if u.get('email', '').strip().lower() == email.strip().lower():
@@ -100,7 +137,10 @@ def get_user_by_email(email: str) -> Optional[dict]:
             return uc
     return None
 
+
 def update_user_profile(email: str, form_data: dict) -> Optional[dict]:
+    if _use_pg():
+        return _pg.pg_update_user_profile(email, form_data)
     data = _load_data()
     for u in data.get('users', []):
         if u.get('email', '').strip().lower() == email.strip().lower():
@@ -120,7 +160,10 @@ def update_user_profile(email: str, form_data: dict) -> Optional[dict]:
             return uc
     return None
 
+
 def update_user_password(email: str, old_password: str, new_password: str) -> bool:
+    if _use_pg():
+        return _pg.pg_update_user_password(email, hash_password(old_password), hash_password(new_password))
     data = _load_data()
     old_hash = hash_password(old_password)
     for u in data.get('users', []):
@@ -133,8 +176,13 @@ def update_user_password(email: str, old_password: str, new_password: str) -> bo
             return False
     return False
 
+
 def admin_update_user(target_email: str, form_data: dict, admin_email: str) -> Optional[dict]:
     """Admin updates any user's role, designation, phone, status, and password."""
+    if _use_pg():
+        new_pwd = form_data.get('new_password', '').strip()
+        new_pwd_hash = hash_password(new_pwd) if new_pwd and len(new_pwd) >= 6 else None
+        return _pg.pg_admin_update_user(target_email, form_data, admin_email, new_pwd_hash)
     data = _load_data()
     for u in data.get('users', []):
         if u.get('email', '').strip().lower() == target_email.strip().lower():
@@ -168,8 +216,11 @@ def admin_update_user(target_email: str, form_data: dict, admin_email: str) -> O
             return uc
     return None
 
+
 def admin_reset_password(target_email: str, new_password: str, admin_email: str) -> bool:
     """Administrator resets password for any user account."""
+    if _use_pg():
+        return _pg.pg_admin_reset_password(target_email, hash_password(new_password), admin_email)
     data = _load_data()
     for u in data.get('users', []):
         if u.get('email', '').strip().lower() == target_email.strip().lower():
@@ -179,7 +230,11 @@ def admin_reset_password(target_email: str, new_password: str, admin_email: str)
             return True
     return False
 
+
 def create_user(form_data: dict, admin_email: str = 'admin@zurekasolutions.com') -> dict:
+    if _use_pg():
+        pwd = form_data.get('password', 'zureka123')
+        return _pg.pg_create_user(form_data, admin_email, hash_password(pwd))
     data = _load_data()
     email = form_data.get('email', '').strip().lower()
     for u in data.get('users', []):
@@ -203,13 +258,21 @@ def create_user(form_data: dict, admin_email: str = 'admin@zurekasolutions.com')
     uc.pop('password_hash', None)
     return uc
 
+
 # ─── CHART OF ACCOUNTS & GENERAL LEDGER ───
 
 def get_chart_of_accounts() -> List[dict]:
+    if _use_pg():
+        return _pg.pg_get_chart_of_accounts()
     data = _load_data()
     return data.get('coa', DEFAULT_COA)
 
-def post_gl_entry(posting_date: str, account_name: str, debit: float, credit: float, voucher_type: str, voucher_no: str, against_account: str, remarks: str) -> dict:
+
+def post_gl_entry(posting_date: str, account_name: str, debit: float, credit: float,
+                  voucher_type: str, voucher_no: str, against_account: str, remarks: str) -> dict:
+    if _use_pg():
+        return _pg.pg_post_gl_entry(posting_date, account_name, debit, credit,
+                                    voucher_type, voucher_no, against_account, remarks)
     data = _load_data()
     entry = {
         "id": f"GL-{len(data.get('gl_entries', [])) + 1:06d}",
@@ -223,7 +286,7 @@ def post_gl_entry(posting_date: str, account_name: str, debit: float, credit: fl
         "remarks": remarks
     }
     data.setdefault('gl_entries', []).insert(0, entry)
-    
+
     # Update COA balance
     for acc in data.get('coa', []):
         if acc['account_name'] == account_name:
@@ -232,44 +295,56 @@ def post_gl_entry(posting_date: str, account_name: str, debit: float, credit: fl
             else:
                 acc['balance'] += (credit - debit)
             break
-            
+
     _save_data(data)
     return entry
 
+
 def get_gl_entries(voucher_no: Optional[str] = None) -> List[dict]:
+    if _use_pg():
+        return _pg.pg_get_gl_entries(voucher_no)
     data = _load_data()
     entries = data.get('gl_entries', [])
     if voucher_no:
         return [e for e in entries if e.get('voucher_no') == voucher_no]
     return entries
 
-# ─── SALES INVOICES (ERP LEVEL) ───
+
+# ─── SALES INVOICES ───
 
 def get_invoices(role: str, user_email: str) -> List[dict]:
+    if _use_pg():
+        return _pg.pg_get_invoices(role, user_email)
     data = _load_data()
     invoices = data.get('invoices', [])
     if role == 'client':
         return [i for i in invoices if i.get('client_email', '').lower() == user_email.lower()]
     return invoices
 
+
 def get_invoice_by_no(invoice_no: str) -> Optional[dict]:
+    if _use_pg():
+        return _pg.pg_get_invoice_by_no(invoice_no)
     data = _load_data()
     for inv in data.get('invoices', []):
         if inv.get('invoice_no') == invoice_no:
             return inv
     return None
 
+
 def add_invoice(form_data: dict) -> dict:
+    if _use_pg():
+        return _pg.pg_add_invoice(form_data)
     data = _load_data()
     today = datetime.now().strftime('%Y-%m-%d')
     inv_no = f"ZUR-INV-{datetime.now().year}-{len(data.get('invoices', [])) + 1:04d}"
-    
+
     # Calculate ERP line items & taxes
     subtotal = float(form_data.get('subtotal', 35000000))
     vat_rate = 0.18
     vat_amount = round(subtotal * vat_rate, 2)
     grand_total = subtotal + vat_amount
-    
+
     items = []
     item_desc = form_data.get('description', 'Enterprise ERPNext Implementation & Architecture')
     items.append({
@@ -303,43 +378,40 @@ def add_invoice(form_data: dict) -> dict:
     }
     data.setdefault('invoices', []).append(inv)
     _save_data(data)
-    
+
     # Automatically Post Double-Entry Journal to General Ledger
     post_gl_entry(
         posting_date=today,
         account_name="Accounts Receivable (Debtors)",
-        debit=grand_total,
-        credit=0.0,
-        voucher_type="Sales Invoice",
-        voucher_no=inv_no,
+        debit=grand_total, credit=0.0,
+        voucher_type="Sales Invoice", voucher_no=inv_no,
         against_account="ERPNext Implementation & Consulting Revenue",
         remarks=f"Receivable booked for {inv['client_name']} ({inv_no})"
     )
     post_gl_entry(
         posting_date=today,
         account_name="ERPNext Implementation & Consulting Revenue",
-        debit=0.0,
-        credit=subtotal,
-        voucher_type="Sales Invoice",
-        voucher_no=inv_no,
+        debit=0.0, credit=subtotal,
+        voucher_type="Sales Invoice", voucher_no=inv_no,
         against_account="Accounts Receivable (Debtors)",
         remarks=f"Consulting revenue recognized ({inv_no})"
     )
     post_gl_entry(
         posting_date=today,
         account_name="URA VAT Payable (18%)",
-        debit=0.0,
-        credit=vat_amount,
-        voucher_type="Sales Invoice",
-        voucher_no=inv_no,
+        debit=0.0, credit=vat_amount,
+        voucher_type="Sales Invoice", voucher_no=inv_no,
         against_account="Accounts Receivable (Debtors)",
         remarks=f"URA Output VAT recognized 18% ({inv_no})"
     )
-    
+
     return inv
+
 
 def make_payment_entry(form_data: dict, user_email: str) -> Optional[dict]:
     """Record payment receipt against an invoice and post to Bank in General Ledger."""
+    if _use_pg():
+        return _pg.pg_make_payment_entry(form_data, user_email)
     data = _load_data()
     invoice_no = form_data.get('invoice_no')
     inv = None
@@ -379,20 +451,16 @@ def make_payment_entry(form_data: dict, user_email: str) -> Optional[dict]:
     post_gl_entry(
         posting_date=today,
         account_name=bank_account,
-        debit=amount,
-        credit=0.0,
-        voucher_type="Payment Entry",
-        voucher_no=pay_no,
+        debit=amount, credit=0.0,
+        voucher_type="Payment Entry", voucher_no=pay_no,
         against_account="Accounts Receivable (Debtors)",
         remarks=f"Payment received from {inv['client_name']} against {invoice_no}"
     )
     post_gl_entry(
         posting_date=today,
         account_name="Accounts Receivable (Debtors)",
-        debit=0.0,
-        credit=amount,
-        voucher_type="Payment Entry",
-        voucher_no=pay_no,
+        debit=0.0, credit=amount,
+        voucher_type="Payment Entry", voucher_no=pay_no,
         against_account=bank_account,
         remarks=f"Receivable cleared for {invoice_no} via {pay_no}"
     )
@@ -400,34 +468,46 @@ def make_payment_entry(form_data: dict, user_email: str) -> Optional[dict]:
     log_activity(user_email, "Payment Received", f"Received UGX {amount:,.0f} for {invoice_no} ({pay_no})")
     return payment_record
 
+
 def get_payments(role: str, user_email: str) -> List[dict]:
+    if _use_pg():
+        return _pg.pg_get_payments(role, user_email)
     data = _load_data()
     payments = data.get('payments', [])
     if role == 'client':
         return [p for p in payments if p.get('client_email', '').lower() == user_email.lower()]
     return payments
 
+
 # ─── PROPOSALS & QUOTATIONS ───
 
 def get_quotations(role: str, user_email: str) -> List[dict]:
+    if _use_pg():
+        return _pg.pg_get_quotations(role, user_email)
     data = _load_data()
     quotes = data.get('quotations', [])
     if role == 'client':
         return [q for q in quotes if q.get('client_email', '').lower() == user_email.lower()]
     return quotes
 
+
 def get_quotation_by_no(quote_no: str) -> Optional[dict]:
+    if _use_pg():
+        return _pg.pg_get_quotation_by_no(quote_no)
     data = _load_data()
     for q in data.get('quotations', []):
         if q.get('quote_no') == quote_no:
             return q
     return None
 
+
 def add_quotation(form_data: dict) -> dict:
+    if _use_pg():
+        return _pg.pg_add_quotation(form_data)
     data = _load_data()
     today = datetime.now().strftime('%Y-%m-%d')
     quote_no = f"ZUR-QT-{datetime.now().year}-{len(data.get('quotations', [])) + 1:04d}"
-    
+
     quote = {
         "quote_no": quote_no,
         "date": today,
@@ -446,7 +526,10 @@ def add_quotation(form_data: dict) -> dict:
     _save_data(data)
     return quote
 
+
 def approve_quotation(quote_no: str) -> Optional[dict]:
+    if _use_pg():
+        return _pg.pg_approve_quotation(quote_no)
     data = _load_data()
     for q in data.get('quotations', []):
         if q.get('quote_no') == quote_no:
@@ -454,6 +537,7 @@ def approve_quotation(quote_no: str) -> Optional[dict]:
             _save_data(data)
             return q
     return None
+
 
 def convert_quotation_to_invoice(quote_no: str, user_email: str) -> Optional[dict]:
     quote = get_quotation_by_no(quote_no)
@@ -469,6 +553,7 @@ def convert_quotation_to_invoice(quote_no: str, user_email: str) -> Optional[dic
     inv = add_invoice(inv_data)
     log_activity(user_email, "Invoice Generated", f"Created milestone invoice {inv['invoice_no']} from proposal {quote_no}")
     return inv
+
 
 def convert_quotation_to_project(quote_no: str, user_email: str) -> Optional[dict]:
     quote = get_quotation_by_no(quote_no)
@@ -486,9 +571,12 @@ def convert_quotation_to_project(quote_no: str, user_email: str) -> Optional[dic
     log_activity(user_email, "Project Initiated", f"Initiated delivery project {proj['code']} from proposal {quote_no}")
     return proj
 
+
 # ─── PROJECTS & CRM ───
 
 def get_projects(role: str, user_email: str) -> List[dict]:
+    if _use_pg():
+        return _pg.pg_get_projects(role, user_email)
     data = _load_data()
     raw_projects = data.get('projects', [])
     normalized = []
@@ -505,7 +593,10 @@ def get_projects(role: str, user_email: str) -> List[dict]:
         return [p for p in normalized if p.get('client_email', '').lower() == user_email.lower()]
     return normalized
 
+
 def add_project(form_data: dict) -> dict:
+    if _use_pg():
+        return _pg.pg_add_project(form_data)
     data = _load_data()
     p_code = f"PRJ-{len(data.get('projects', [])) + 1:03d}"
     proj = {
@@ -527,7 +618,10 @@ def add_project(form_data: dict) -> dict:
     _save_data(data)
     return proj
 
+
 def update_project_progress(project_code: str, status: str, pct: int, milestone: str, user_email: str) -> Optional[dict]:
+    if _use_pg():
+        return _pg.pg_update_project_progress(project_code, status, pct, milestone, user_email)
     data = _load_data()
     for p in data.get('projects', []):
         if p.get('code') == project_code or p.get('id') == project_code:
@@ -541,11 +635,17 @@ def update_project_progress(project_code: str, status: str, pct: int, milestone:
             return p
     return None
 
+
 def get_clients() -> List[dict]:
+    if _use_pg():
+        return _pg.pg_get_clients()
     data = _load_data()
     return data.get('clients', [])
 
+
 def add_client(form_data: dict) -> dict:
+    if _use_pg():
+        return _pg.pg_add_client(form_data)
     data = _load_data()
     client = {
         "code": f"CLI-{len(data.get('clients', [])) + 1:03d}",
@@ -560,21 +660,30 @@ def add_client(form_data: dict) -> dict:
     _save_data(data)
     return client
 
+
 def get_systems(pillar: Optional[str] = None) -> List[dict]:
+    if _use_pg():
+        return _pg.pg_get_systems(pillar)
     data = _load_data()
     systems = data.get('systems', [])
     if pillar:
         return [s for s in systems if s.get('pillar', '').lower() == pillar.lower()]
     return systems
 
+
 def get_system_by_code(code: str) -> Optional[dict]:
+    if _use_pg():
+        return _pg.pg_get_system_by_code(code)
     data = _load_data()
     for s in data.get('systems', []):
         if s.get('code') == code:
             return s
     return None
 
+
 def add_system(form_data: dict) -> dict:
+    if _use_pg():
+        return _pg.pg_add_system(form_data)
     data = _load_data()
     item = {
         "code": form_data.get('code', f"SYS-{len(data.get('systems', [])) + 1:03d}"),
@@ -589,7 +698,10 @@ def add_system(form_data: dict) -> dict:
     _save_data(data)
     return item
 
+
 def add_inquiry(form_data: dict) -> dict:
+    if _use_pg():
+        return _pg.pg_add_inquiry(form_data)
     data = _load_data()
     item = {
         "id": f"INQ-{len(data.get('inquiries', [])) + 1:04d}",
@@ -607,19 +719,25 @@ def add_inquiry(form_data: dict) -> dict:
     _save_data(data)
     return item
 
+
 def get_inquiries() -> List[dict]:
+    if _use_pg():
+        return _pg.pg_get_inquiries()
     data = _load_data()
     return data.get('inquiries', [])
+
 
 # ─── ERP EXECUTIVE DASHBOARD STATS ───
 
 def get_stats(role: str, user_email: str) -> dict:
+    if _use_pg():
+        return _pg.pg_get_stats(role, user_email)
     quotes = get_quotations(role, user_email)
     invoices = get_invoices(role, user_email)
     projects = get_projects(role, user_email)
     systems = get_systems()
     clients = get_clients()
-    
+
     total_invoiced = sum(i.get('grand_total', 0.0) for i in invoices)
     total_collected = sum(i.get('paid_amount', 0.0) for i in invoices)
     total_outstanding = sum(i.get('outstanding_amount', 0.0) for i in invoices)

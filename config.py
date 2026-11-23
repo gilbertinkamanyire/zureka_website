@@ -25,6 +25,11 @@ if os.path.exists(env_path):
 
 PORT = int(os.environ.get("PORT", 8080))
 
+# PostgreSQL Database Configuration
+DATABASE_URL = os.environ.get("DATABASE_URL")
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 # Pandora Networks SMS Gateway Configuration
 SMS_API_URL = "https://www.sms.thepandoranetworks.com/API/send_sms/"
 SMS_USERNAME = os.environ.get("PANDORA_SMS_USER", "0773245712")

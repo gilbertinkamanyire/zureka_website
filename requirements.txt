@@ -1,2 +1,1 @@
-# Zureka ERP Platform Dependencies
-# Built entirely on Python Standard Library (zero external package dependencies)
+psycopg2-binary
