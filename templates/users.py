@@ -153,14 +153,15 @@ def render_desk_users(user: dict, users: List[dict], created_notice: bool = Fals
         <form action="/api/users/update" method="POST">
           <input type="hidden" id="editEmail" name="target_email">
           <div class="modal-body">
-            <div style="margin-bottom: 16px;">
-              <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Account Email</label>
-              <input type="text" id="editEmailDisplay" readonly style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px; background: #F8FAFC; color: #64748B;">
-            </div>
-
-            <div style="margin-bottom: 16px;">
-              <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Full Name *</label>
-              <input type="text" id="editFullName" name="full_name" required style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+            <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin-bottom: 16px;">
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Full Name *</label>
+                <input type="text" id="editFullName" name="full_name" required style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Corporate Email *</label>
+                <input type="email" id="editNewEmail" name="new_email" required style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+              </div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin-bottom: 16px;">
@@ -190,9 +191,18 @@ def render_desk_users(user: dict, users: List[dict], created_notice: bool = Fals
               </div>
             </div>
 
-            <div style="margin-bottom: 16px;">
-              <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Phone (SMS Alerts)</label>
-              <input type="text" id="editPhone" name="phone" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Phone (SMS Alerts)</label>
+                <input type="text" id="editPhone" name="phone" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+              </div>
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Change Password (optional)</label>
+                <input type="password" name="new_password" minlength="6" placeholder="Leave blank to keep unchanged" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+              </div>
+            </div>
+            <div style="font-size: 11.5px; color: #64748B;">
+              💡 <em>Admin notice:</em> You can update profile details, change email, reassign roles, or set a new password directly.
             </div>
           </div>
           <div class="modal-footer">
@@ -234,7 +244,7 @@ def render_desk_users(user: dict, users: List[dict], created_notice: bool = Fals
     <script>
     function openEditUserModal(email, name, role, title, dept, phone, status) {{
       document.getElementById('editEmail').value = email;
-      document.getElementById('editEmailDisplay').value = email;
+      document.getElementById('editNewEmail').value = email;
       document.getElementById('editFullName').value = name;
       document.getElementById('editRole').value = role;
       document.getElementById('editTitle').value = title;

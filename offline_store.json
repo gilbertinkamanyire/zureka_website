@@ -48,7 +48,7 @@
       "email": "sales@zurekasolutions.com",
       "password_hash": "7a43ab9e07c40e0be9fc2be360c602674660c6a9004cde1ef19f1e08e8444b65",
       "full_name": "Patricia Namubiru",
-      "title": "Commercial Business Development Lead",
+      "title": "Senior CRM Specialist",
       "role": "sales",
       "department": "Commercial Partnerships & Sales",
       "phone": "+256 772 112 344",
@@ -976,6 +976,20 @@
     }
   ],
   "activity_logs": [
+    {
+      "id": "ACT-00024",
+      "timestamp": "2026-11-23 17:15:51",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "Password Reset by Admin",
+      "details": "Administrator reset password credentials for sales@zurekasolutions.com"
+    },
+    {
+      "id": "ACT-00023",
+      "timestamp": "2026-11-23 17:15:51",
+      "user_email": "admin@zurekasolutions.com",
+      "action": "User Account Updated",
+      "details": "Administrator modified account profile for sales@zurekasolutions.com (Role: sales)"
+    },
     {
       "id": "ACT-00022",
       "timestamp": "2026-11-23 16:28:58",

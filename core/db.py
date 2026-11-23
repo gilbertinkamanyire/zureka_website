@@ -134,13 +134,18 @@ def update_user_password(email: str, old_password: str, new_password: str) -> bo
     return False
 
 def admin_update_user(target_email: str, form_data: dict, admin_email: str) -> Optional[dict]:
-    """Admin updates any user's role, designation, phone, or status."""
+    """Admin updates any user's role, designation, phone, status, and password."""
     data = _load_data()
     for u in data.get('users', []):
         if u.get('email', '').strip().lower() == target_email.strip().lower():
             if 'full_name' in form_data and form_data['full_name'].strip():
                 u['full_name'] = form_data['full_name'].strip()
                 u['avatar'] = u['full_name'][0].upper()
+            if 'new_email' in form_data and form_data['new_email'].strip():
+                new_e = form_data['new_email'].strip().lower()
+                if new_e != u['email'].lower():
+                    if not any(x.get('email', '').lower() == new_e for x in data.get('users', [])):
+                        u['email'] = new_e
             if 'role' in form_data and form_data['role']:
                 u['role'] = form_data['role']
             if 'title' in form_data:
@@ -151,8 +156,13 @@ def admin_update_user(target_email: str, form_data: dict, admin_email: str) -> O
                 u['phone'] = form_data['phone'].strip()
             if 'status' in form_data:
                 u['status'] = form_data['status']
+            if 'new_password' in form_data and form_data['new_password'].strip():
+                pwd = form_data['new_password'].strip()
+                if len(pwd) >= 6:
+                    u['password_hash'] = hash_password(pwd)
+                    log_activity(admin_email, "Password Changed by Admin", f"Administrator updated password credentials for {u.get('email')}")
             _save_data(data)
-            log_activity(admin_email, "User Account Updated", f"Administrator modified account profile for {target_email} (Role: {u.get('role')})")
+            log_activity(admin_email, "User Account Updated", f"Administrator modified account profile for {u.get('email')} (Role: {u.get('role')})")
             uc = dict(u)
             uc.pop('password_hash', None)
             return uc
