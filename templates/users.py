@@ -1,5 +1,5 @@
 """
-User Directory & Role Assignment View (Admin-Governed Account Creation)
+User Directory & Role Assignment View (Admin-Governed Account Creation & Credential Management)
 """
 from typing import List
 from templates.base import render_desk_base
@@ -18,7 +18,7 @@ def render_desk_users(user: dict, users: List[dict], created_notice: bool = Fals
     elif updated_notice:
         notice_html = """
         <div style="background: #DCFCE7; border: 1px solid #86EFAC; color: #166534; padding: 12px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 600; margin-bottom: 24px;">
-          ✓ User account credentials, designation, and role permissions successfully updated.
+          ✓ User account details and security credentials successfully updated.
         </div>
         """
     elif reset_notice:
@@ -34,17 +34,12 @@ def render_desk_users(user: dict, users: List[dict], created_notice: bool = Fals
         status = u.get('status', 'Active')
         status_cls = 'indicator-paid' if status == 'Active' else 'indicator-draft'
 
-        admin_actions = ""
+        admin_action = ""
         if is_admin:
-            admin_actions = f"""
-            <div style="display: flex; gap: 6px; justify-content: flex-end;">
-              <button type="button" class="btn btn-outline btn-sm" onclick="openEditUserModal('{u.get('email')}', '{u.get('full_name')}', '{u.get('role')}', '{u.get('title', '')}', '{u.get('department', '')}', '{u.get('phone', '')}', '{status}')">
-                ✏️ Edit
-              </button>
-              <button type="button" class="btn btn-outline btn-sm" onclick="openResetModal('{u.get('email')}', '{u.get('full_name')}')">
-                🔑 Reset Pwd
-              </button>
-            </div>
+            admin_action = f"""
+            <button type="button" class="btn btn-navy btn-sm" onclick="openEditUserModal('{u.get('email')}', '{u.get('full_name')}', '{u.get('role')}', '{u.get('title', '')}', '{u.get('department', '')}', '{u.get('phone', '')}', '{status}')" style="white-space: nowrap; font-size: 12px; padding: 6px 14px;">
+              ✏️ Edit
+            </button>
             """
 
         rows += f"""
@@ -72,7 +67,7 @@ def render_desk_users(user: dict, users: List[dict], created_notice: bool = Fals
               {status}
             </span>
           </td>
-          {f'<td style="text-align: right;">{admin_actions}</td>' if is_admin else ''}
+          {f'<td style="text-align: right; white-space: nowrap;">{admin_action}</td>' if is_admin else ''}
         </tr>
         """
 
@@ -145,9 +140,9 @@ def render_desk_users(user: dict, users: List[dict], created_notice: bool = Fals
 
     <!-- Edit User Modal (Admin Exclusive) -->
     <div id="editUserModal" class="modal-overlay">
-      <div class="modal-card">
+      <div class="modal-card" style="max-width: 620px;">
         <div class="modal-header">
-          <div class="modal-title">Edit User Account & Role Assignment</div>
+          <div class="modal-title">Edit User Details & Password</div>
           <button class="modal-close" onclick="closeModal('editUserModal')">&times;</button>
         </div>
         <form action="/api/users/update" method="POST">
@@ -191,51 +186,31 @@ def render_desk_users(user: dict, users: List[dict], created_notice: bool = Fals
               </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-              <div>
-                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Phone (SMS Alerts)</label>
-                <input type="text" id="editPhone" name="phone" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+            <div style="margin-bottom: 16px;">
+              <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Phone (SMS Alerts)</label>
+              <input type="text" id="editPhone" name="phone" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+            </div>
+
+            <!-- Embedded Password Change Section -->
+            <div style="background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 8px; padding: 16px; margin-top: 18px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                <span style="font-size: 13px; font-weight: 800; color: #0F172A; display: flex; align-items: center; gap: 6px;">
+                  🔑 Change / Reset Password
+                </span>
+                <span style="font-size: 11px; color: #64748B; font-weight: 600;">Optional</span>
               </div>
+              <p style="font-size: 12px; color: #64748B; margin-bottom: 10px;">
+                Type a new password below to reset this user's password immediately. Leave empty to keep their existing password.
+              </p>
               <div>
-                <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">Change Password (optional)</label>
-                <input type="password" name="new_password" minlength="6" placeholder="Leave blank to keep unchanged" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
+                <input type="password" id="editNewPassword" name="new_password" minlength="6" placeholder="Enter new password (min. 6 characters)" style="width: 100%; padding: 9px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px; background: #FFFFFF;">
               </div>
             </div>
-            <div style="font-size: 11.5px; color: #64748B;">
-              💡 <em>Admin notice:</em> You can update profile details, change email, reassign roles, or set a new password directly.
-            </div>
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline" onclick="closeModal('editUserModal')">Cancel</button>
-            <button type="submit" class="btn btn-gold">Save Changes &rarr;</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- Reset Password Modal (Admin Exclusive) -->
-    <div id="resetPwdModal" class="modal-overlay">
-      <div class="modal-card">
-        <div class="modal-header">
-          <div class="modal-title">Reset User Password (Administrator)</div>
-          <button class="modal-close" onclick="closeModal('resetPwdModal')">&times;</button>
-        </div>
-        <form action="/api/users/reset-password" method="POST">
-          <input type="hidden" id="resetTargetEmail" name="target_email">
-          <div class="modal-body">
-            <div style="margin-bottom: 16px;">
-              <div style="font-size: 12px; color: #64748B;">Resetting password for:</div>
-              <div id="resetTargetDisplay" style="font-size: 15px; font-weight: 800; color: #0F172A; margin-top: 2px;"></div>
-            </div>
-
-            <div style="margin-bottom: 16px;">
-              <label style="display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px;">New Temporary Password *</label>
-              <input type="password" name="new_password" required minlength="6" placeholder="••••••••" style="width: 100%; padding: 8px 12px; border: 1px solid var(--z-border); border-radius: 6px; font-size: 13px;">
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline" onclick="closeModal('resetPwdModal')">Cancel</button>
-            <button type="submit" class="btn btn-gold">Confirm Password Reset &rarr;</button>
+            <button type="submit" class="btn btn-gold">Save Changes & Password &rarr;</button>
           </div>
         </form>
       </div>
@@ -251,12 +226,9 @@ def render_desk_users(user: dict, users: List[dict], created_notice: bool = Fals
       document.getElementById('editDept').value = dept;
       document.getElementById('editPhone').value = phone;
       document.getElementById('editStatus').value = status;
+      const pwdEl = document.getElementById('editNewPassword');
+      if (pwdEl) pwdEl.value = '';
       openModal('editUserModal');
-    }}
-    function openResetModal(email, name) {{
-      document.getElementById('resetTargetEmail').value = email;
-      document.getElementById('resetTargetDisplay').innerText = name + ' (' + email + ')';
-      openModal('resetPwdModal');
     }}
     </script>
     """ if is_admin else ""
@@ -274,7 +246,7 @@ def render_desk_users(user: dict, users: List[dict], created_notice: bool = Fals
 
     {notice_html}
 
-    <div class="table-wrap">
+    <div class="table-wrap" style="overflow-x: auto;">
       <table class="z-table">
         <thead>
           <tr>
@@ -284,7 +256,7 @@ def render_desk_users(user: dict, users: List[dict], created_notice: bool = Fals
             <th>Department / Practice</th>
             <th>Phone</th>
             <th>Status</th>
-            {f'<th style="text-align: right;">Admin Actions</th>' if is_admin else ''}
+            {f'<th style="text-align: right; min-width: 100px;">Actions</th>' if is_admin else ''}
           </tr>
         </thead>
         <tbody>
