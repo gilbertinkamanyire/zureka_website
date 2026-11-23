@@ -24,8 +24,10 @@ def send_sms(to: str, message: str) -> dict:
         "username": config.SMS_USERNAME,
         "password": config.SMS_PASSWORD,
         "sender": config.SMS_SENDER_ID,
-        "to": clean_to,
-        "message": message
+        "number": clean_to,
+        "message": message[:160],
+        "message_type": "non_customised",
+        "message_category": "bulk"
     }
 
     try:
@@ -38,13 +40,22 @@ def send_sms(to: str, message: str) -> dict:
                 "Content-Type": "application/x-www-form-urlencoded"
             }
         )
-        with urllib.request.urlopen(req, timeout=5) as response:
-            resp_body = response.read().decode('utf-8')
+        with urllib.request.urlopen(req, timeout=8) as response:
+            resp_body = response.read().decode('utf-8', errors='ignore')
+            resp_json = {}
+            try:
+                resp_json = json.loads(resp_body)
+            except Exception:
+                pass
+
+            is_success = resp_json.get("success", False) if isinstance(resp_json, dict) else False
+            status_text = "Delivered" if is_success else ("Provider Responded" if resp_body else "Queued")
+            
             log_entry = {
                 "id": f"SMS-{len(SMS_LOGS) + 1:04d}",
                 "to": clean_to,
                 "message": message,
-                "status": "Delivered",
+                "status": status_text,
                 "timestamp": timestamp,
                 "provider_response": resp_body[:200]
             }
