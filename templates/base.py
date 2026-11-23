@@ -2,7 +2,7 @@
 Base Layout, ERPNext Desk Shell, and CSS Design System
 """
 import config
-from core.rbac import get_role_label, get_role_badge
+from core.rbac import get_role_label, get_role_badge, has_permission
 
 CSS_STYLES = """
 :root {
@@ -183,7 +183,7 @@ def render_public_base(title: str, content: str, active_tab: str = 'home') -> st
   <div class="z-topbar">
     <div class="container z-topbar-inner">
       <div>📍 {config.LOCATION} &nbsp;|&nbsp; 📞 {config.PHONE} &nbsp;|&nbsp; ✉️ {config.EMAIL}</div>
-      <div>100% Offline Python Architecture &nbsp;•&nbsp; Pandora Networks SMS Gateway</div>
+      <div>{config.TAGLINE}</div>
     </div>
   </div>
 
@@ -251,6 +251,51 @@ def render_desk_base(title: str, user: dict, content: str, active_tab: str = 'wo
                 crumbs_html += f" <span>/</span> <span>{b_name}</span>"
     crumbs_html += "</div>"
 
+    # Build sidebar navigation dynamically filtered by RBAC
+    sidebar_sections = [
+        ("Workspaces", [
+            ("/desk", "📊 Desk Workspace", None, "workspace"),
+            ("/desk/quotations", "📄 Quotations & Proposals", "Quotation", "quotations"),
+            ("/desk/projects", "🚀 Delivery Projects", "Delivery Project", "projects"),
+            ("/desk/clients", "🏢 CRM Customers 360", "Customer", "clients"),
+            ("/desk/systems", "⚙️ Solutions Catalog (16)", "Solution", "systems"),
+        ]),
+        ("Accounting & Finance", [
+            ("/desk/invoices", "💰 Sales Invoices", "Sales Invoice", "invoices"),
+            ("/desk/payments", "💳 Payment Receipts", "Payment Entry", "payments"),
+            ("/desk/general-ledger", "📒 General Ledger", "General Ledger", "gl"),
+            ("/desk/chart-of-accounts", "🌳 Chart of Accounts", "Chart of Accounts", "coa"),
+        ]),
+        ("Administration & Comms", [
+            ("/desk/profile", "👤 My Profile Settings", None, "profile"),
+            ("/desk/sms", "📱 Pandora SMS Gateway", "SMS Gateway", "sms"),
+            ("/desk/permissions", "🔒 RBAC Matrix", "Role Permission", "permissions"),
+            ("/desk/users", "👥 User Directory", "User", "users"),
+        ])
+    ]
+
+    sidebar_html = ""
+    for sec_title, links in sidebar_sections:
+        visible_links = [item for item in links if (item[2] is None or has_permission(role, item[2], 'read'))]
+        if visible_links:
+            mt = "0" if not sidebar_html else "20px"
+            sidebar_html += f'<div class="desk-sidebar-title" style="margin-top: {mt};"><span>{sec_title}</span></div>\n'
+            for url, label, doctype, tab_key in visible_links:
+                is_active = 'active' if active_tab == tab_key else ''
+                sidebar_html += f'<a href="{url}" class="desk-sidebar-link {is_active}"><span>{label}</span></a>\n'
+
+    sms_widget_html = ""
+    if has_permission(role, 'SMS Gateway', 'read'):
+        sms_widget_html = """
+        <div style="margin-top: auto; padding: 14px 18px; background: #F8FAFC; border-radius: 8px; margin: 24px 14px 14px; border: 1px solid var(--z-border);">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-weight: 800; color: #0F172A; font-size: 11.5px;">SMS Gateway</span>
+            <span style="color: #16A34A; font-weight: 800; font-size: 11px;">● Active</span>
+          </div>
+          <div style="color: var(--z-slate); font-size: 11px; margin-top: 3px;">Pandora Networks (Uganda)</div>
+        </div>
+        """
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -288,64 +333,8 @@ def render_desk_base(title: str, user: dict, content: str, active_tab: str = 'wo
 
   <div class="desk-layout">
     <aside class="desk-sidebar">
-      <div class="desk-sidebar-title">
-        <span>Workspaces</span>
-      </div>
-      <a href="/desk" class="desk-sidebar-link {'active' if active_tab == 'workspace' else ''}">
-        <span>📊 Desk Workspace</span>
-      </a>
-      <a href="/desk/quotations" class="desk-sidebar-link {'active' if active_tab == 'quotations' else ''}">
-        <span>📄 Quotations & Proposals</span>
-      </a>
-      <a href="/desk/projects" class="desk-sidebar-link {'active' if active_tab == 'projects' else ''}">
-        <span>🚀 Delivery Projects</span>
-      </a>
-      <a href="/desk/clients" class="desk-sidebar-link {'active' if active_tab == 'clients' else ''}">
-        <span>🏢 CRM Customers 360</span>
-      </a>
-      <a href="/desk/systems" class="desk-sidebar-link {'active' if active_tab == 'systems' else ''}">
-        <span>⚙️ Solutions Catalog (16)</span>
-      </a>
-
-      <div class="desk-sidebar-title" style="margin-top: 20px;">
-        <span>Accounting & Finance</span>
-      </div>
-      <a href="/desk/invoices" class="desk-sidebar-link {'active' if active_tab == 'invoices' else ''}">
-        <span>💰 Sales Invoices</span>
-      </a>
-      <a href="/desk/payments" class="desk-sidebar-link {'active' if active_tab == 'payments' else ''}">
-        <span>💳 Payment Receipts</span>
-      </a>
-      <a href="/desk/general-ledger" class="desk-sidebar-link {'active' if active_tab == 'gl' else ''}">
-        <span>📒 General Ledger</span>
-      </a>
-      <a href="/desk/chart-of-accounts" class="desk-sidebar-link {'active' if active_tab == 'coa' else ''}">
-        <span>🌳 Chart of Accounts</span>
-      </a>
-
-      <div class="desk-sidebar-title" style="margin-top: 20px;">
-        <span>Administration & Comms</span>
-      </div>
-      <a href="/desk/profile" class="desk-sidebar-link {'active' if active_tab == 'profile' else ''}">
-        <span>👤 My Profile Settings</span>
-      </a>
-      <a href="/desk/sms" class="desk-sidebar-link {'active' if active_tab == 'sms' else ''}">
-        <span>📱 Pandora SMS Gateway</span>
-      </a>
-      <a href="/desk/permissions" class="desk-sidebar-link {'active' if active_tab == 'permissions' else ''}">
-        <span>🔒 RBAC Matrix</span>
-      </a>
-      <a href="/desk/users" class="desk-sidebar-link {'active' if active_tab == 'users' else ''}">
-        <span>👥 User Directory</span>
-      </a>
-
-      <div style="margin-top: auto; padding: 14px 18px; background: #F8FAFC; border-radius: 8px; margin: 24px 14px 14px; border: 1px solid var(--z-border);">
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-          <span style="font-weight: 800; color: #0F172A; font-size: 11.5px;">SMS Gateway</span>
-          <span style="color: #16A34A; font-weight: 800; font-size: 11px;">● Active</span>
-        </div>
-        <div style="color: var(--z-slate); font-size: 11px; margin-top: 3px;">Pandora Networks (Uganda)</div>
-      </div>
+      {sidebar_html}
+      {sms_widget_html}
     </aside>
 
     <main class="desk-main">
