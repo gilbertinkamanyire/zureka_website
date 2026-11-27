@@ -121,6 +121,54 @@ a { text-decoration: none; color: inherit; }
 .modal-close:hover { color: #0F172A; }
 .modal-body { padding: 24px; max-height: 80vh; overflow-y: auto; }
 .modal-footer { padding: 16px 24px; border-top: 1px solid var(--z-border); display: flex; justify-content: flex-end; gap: 12px; background: #F8FAFC; }
+
+@media (max-width: 900px) {
+  .desk-main { min-width: 0; max-width: none; padding: 24px; }
+  .desk-sidebar { width: 220px; }
+  .desk-navbar { height: auto; min-height: 56px; flex-wrap: wrap; gap: 10px; padding-right: 16px; padding-left: 16px; }
+  .desk-navbar > div:first-child { flex: 1 1 100%; justify-content: space-between; gap: 16px !important; }
+  .awesomebar-wrap { flex: 1 1 280px; width: auto; }
+  .desk-user-chip { gap: 8px; margin-left: auto; }
+  .card-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
+  .erp-header { align-items: flex-start; flex-wrap: wrap; gap: 12px; }
+  .erp-actions { flex-wrap: wrap; }
+  [style*="grid-template-columns"] { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+
+@media (max-width: 640px) {
+  .container { padding-right: 16px; padding-left: 16px; }
+  .z-topbar-inner { flex-direction: column; gap: 4px; text-align: center; }
+  .z-nav { padding: 10px 0; }
+  .z-nav-inner { flex-direction: column; gap: 12px; }
+  .z-nav-links { justify-content: center; flex-wrap: wrap; gap: 10px 16px; }
+  .z-nav-link { font-size: 13px; }
+  .desk-navbar { height: auto; min-height: 56px; flex-wrap: wrap; gap: 10px; padding: 10px 14px; }
+  .desk-navbar > div:first-child { width: 100%; flex-wrap: wrap; gap: 10px !important; }
+  .desk-navbar-brand { font-size: 14px; }
+  .awesomebar-wrap { flex: 1 1 100%; width: auto; }
+  .awesomebar-kbd { display: none; }
+  .desk-user-chip { width: 100%; justify-content: flex-end; }
+  .desk-sidebar { width: 100%; max-height: 190px; overflow-y: auto; border-right: 0; border-bottom: 1px solid var(--z-border); padding: 8px 0; }
+  .desk-sidebar-title { padding: 8px 16px; }
+  .desk-sidebar-link { padding: 10px 16px; }
+  .desk-main { width: 100%; max-width: none; padding: 18px 14px; }
+  [style*="grid-template-columns"] { grid-template-columns: minmax(0, 1fr) !important; }
+  .card-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .erp-header { flex-direction: column; }
+  .erp-actions { width: 100%; }
+  .desk-main h1, .desk-main .erp-title { font-size: clamp(20px, 6vw, 26px) !important; overflow-wrap: anywhere; }
+  .z-card { padding: 20px; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .z-table { min-width: 600px; }
+  .modal-overlay { padding: 12px; }
+  .modal-card { max-height: calc(100dvh - 24px); }
+  .modal-header { padding: 16px; }
+  .modal-body { padding: 16px; max-height: 65dvh; }
+  .modal-footer { padding: 12px 16px; flex-wrap: wrap; }
+  input, select, textarea { max-width: 100%; font-size: 16px; }
+  .btn { min-height: 40px; }
+  .desk-main, .container { overflow-wrap: anywhere; }
+}
 """
 
 AWESOMEBAR_SCRIPT = """
