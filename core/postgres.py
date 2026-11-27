@@ -496,6 +496,32 @@ def pg_create_user(form_data: dict, admin_email: str, pwd_hash: str) -> dict:
             u.pop('password_hash', None)
             return u
 
+def pg_delete_user(target_email: str, admin_email: str) -> str:
+    if target_email.strip().lower() == admin_email.strip().lower():
+        return "self"
+
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("LOCK TABLE users IN SHARE ROW EXCLUSIVE MODE;")
+            cur.execute(
+                "SELECT email, role FROM users WHERE LOWER(email) = LOWER(%s);",
+                (target_email.strip(),)
+            )
+            target = cur.fetchone()
+            if not target:
+                return "not_found"
+
+            if target[1].lower() == 'admin':
+                cur.execute("SELECT COUNT(*) FROM users WHERE LOWER(role) = 'admin';")
+                if cur.fetchone()[0] <= 1:
+                    return "last_admin"
+
+            cur.execute("DELETE FROM users WHERE LOWER(email) = LOWER(%s);", (target_email.strip(),))
+            if cur.rowcount != 1:
+                return "not_found"
+            conn.commit()
+            return "deleted"
+
 # Systems
 def pg_get_systems() -> List[dict]:
     with get_connection() as conn:

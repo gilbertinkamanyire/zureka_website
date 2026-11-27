@@ -33,3 +33,10 @@ def update_session_user(email: str, updated_user: dict) -> None:
 def destroy_session(token: str) -> None:
     """Remove session token upon logout."""
     ACTIVE_SESSIONS.pop(token, None)
+
+def destroy_sessions_for_user(email: str) -> None:
+    """Revoke all active sessions belonging to an account."""
+    normalized_email = email.strip().lower()
+    for token, user in list(ACTIVE_SESSIONS.items()):
+        if user.get('email', '').strip().lower() == normalized_email:
+            destroy_session(token)

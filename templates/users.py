@@ -1,15 +1,37 @@
 """
 User Directory & Role Assignment View (Admin-Governed Account Creation & Credential Management)
 """
+from html import escape
 from typing import List
 from templates.base import render_desk_base
 from core.rbac import get_role_label, get_role_badge, ROLES
 
-def render_desk_users(user: dict, users: List[dict], created_notice: bool = False, updated_notice: bool = False, reset_notice: bool = False) -> str:
+def render_desk_users(
+    user: dict,
+    users: List[dict],
+    created_notice: bool = False,
+    updated_notice: bool = False,
+    reset_notice: bool = False,
+    deleted_notice: bool = False,
+    delete_error: str = ""
+) -> str:
     is_admin = (user.get('role') == 'admin')
+    current_email = user.get('email', '').strip().lower()
+    admin_count = sum(1 for account in users if str(account.get('role', '')).lower() == 'admin')
 
     notice_html = ""
-    if created_notice:
+    delete_errors = {
+        "self": "You cannot delete your own administrator account.",
+        "last_admin": "The last administrator account cannot be deleted.",
+        "not_found": "The selected user account was not found."
+    }
+    if delete_error in delete_errors:
+        notice_html = f"""
+        <div role="alert" style="background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; padding: 12px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 600; margin-bottom: 24px;">
+          {delete_errors[delete_error]}
+        </div>
+        """
+    elif created_notice:
         notice_html = """
         <div style="background: #DCFCE7; border: 1px solid #86EFAC; color: #166534; padding: 12px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 600; margin-bottom: 24px;">
           ✓ New user account successfully created! The user can now authenticate with their assigned role.
@@ -27,19 +49,41 @@ def render_desk_users(user: dict, users: List[dict], created_notice: bool = Fals
           ✓ User password successfully reset by Administrator.
         </div>
         """
+    elif deleted_notice:
+        notice_html = """
+        <div role="status" style="background: #DCFCE7; border: 1px solid #86EFAC; color: #166534; padding: 12px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 600; margin-bottom: 24px;">
+          ✓ User account permanently deleted.
+        </div>
+        """
 
     rows = ""
     for u in users:
         role = u.get('role', 'client')
         status = u.get('status', 'Active')
         status_cls = 'indicator-paid' if status == 'Active' else 'indicator-draft'
+        email = str(u.get('email', ''))
 
         admin_action = ""
         if is_admin:
+            delete_action = ""
+            can_delete = (
+                email.strip().lower() != current_email
+                and not (str(role).lower() == 'admin' and admin_count <= 1)
+            )
+            if can_delete:
+                delete_action = f"""
+                <form action="/api/users/delete" method="POST" style="display: inline;" onsubmit="return confirm('Delete this account permanently? This cannot be undone.');">
+                  <input type="hidden" name="target_email" value="{escape(email, quote=True)}">
+                  <button type="submit" class="btn btn-sm" style="background: #DC2626; color: #FFFFFF; white-space: nowrap; font-size: 12px; padding: 6px 14px;">
+                    🗑 Delete
+                  </button>
+                </form>
+                """
             admin_action = f"""
             <button type="button" class="btn btn-navy btn-sm" onclick="openEditUserModal('{u.get('email')}', '{u.get('full_name')}', '{u.get('role')}', '{u.get('title', '')}', '{u.get('department', '')}', '{u.get('phone', '')}', '{status}')" style="white-space: nowrap; font-size: 12px; padding: 6px 14px;">
               ✏️ Edit
             </button>
+            {delete_action}
             """
 
         rows += f"""

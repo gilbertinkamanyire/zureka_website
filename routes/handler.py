@@ -285,7 +285,12 @@ class ZurekaRequestHandler(BaseHTTPRequestHandler):
                 created = query.get('created', ['0'])[0] == '1'
                 updated = query.get('updated', ['0'])[0] == '1'
                 reset = query.get('reset', ['0'])[0] == '1'
-                self.send_html(users_tmpl.render_desk_users(user, users, created_notice=created, updated_notice=updated, reset_notice=reset))
+                deleted = query.get('deleted', ['0'])[0] == '1'
+                delete_error = query.get('delete_error', [''])[0]
+                self.send_html(users_tmpl.render_desk_users(
+                    user, users, created_notice=created, updated_notice=updated,
+                    reset_notice=reset, deleted_notice=deleted, delete_error=delete_error
+                ))
                 return
 
         self.send_error(404, "Page Not Found")
@@ -504,6 +509,21 @@ class ZurekaRequestHandler(BaseHTTPRequestHandler):
                 self.redirect('/desk/users?reset=1')
             else:
                 self.redirect('/desk/users?error=1')
+            return
+
+        # Delete User (Admin only)
+        elif path == '/api/users/delete':
+            if role != 'admin' or not rbac.has_permission(role, 'User', 'write'):
+                self.send_html(base_tmpl.render_permission_denied(user, 'User', 'write'), 403)
+                return
+
+            target_email = data.get('target_email', '').strip()
+            result = db.delete_user_account(target_email, user['email'])
+            if result == "deleted":
+                auth.destroy_sessions_for_user(target_email)
+                self.redirect('/desk/users?deleted=1')
+            else:
+                self.redirect(f'/desk/users?delete_error={result}')
             return
 
         self.send_error(404, "Endpoint Not Found")

@@ -259,6 +259,43 @@ def create_user(form_data: dict, admin_email: str = 'admin@zurekasolutions.com')
     return uc
 
 
+def delete_user_account(target_email: str, admin_email: str) -> str:
+    """Delete an account unless it belongs to the requesting admin or is the last admin."""
+    normalized_target = target_email.strip().lower()
+    normalized_admin = admin_email.strip().lower()
+    if normalized_target == normalized_admin:
+        return "self"
+    if not normalized_target:
+        return "not_found"
+
+    if _use_pg():
+        result = _pg.pg_delete_user(normalized_target, normalized_admin)
+    else:
+        data = _load_data()
+        users = data.get('users', [])
+        target_index = next(
+            (index for index, account in enumerate(users)
+             if account.get('email', '').strip().lower() == normalized_target),
+            None
+        )
+        if target_index is None:
+            return "not_found"
+
+        target = users[target_index]
+        if str(target.get('role', '')).lower() == 'admin':
+            admin_count = sum(1 for account in users if str(account.get('role', '')).lower() == 'admin')
+            if admin_count <= 1:
+                return "last_admin"
+
+        del users[target_index]
+        _save_data(data)
+        result = "deleted"
+
+    if result == "deleted":
+        log_activity(admin_email, "User Account Deleted", f"Administrator deleted user account {normalized_target}")
+    return result
+
+
 # ─── CHART OF ACCOUNTS & GENERAL LEDGER ───
 
 def get_chart_of_accounts() -> List[dict]:
