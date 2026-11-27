@@ -46,6 +46,8 @@ a { text-decoration: none; color: inherit; }
 /* ERPNext Desk Shell */
 .desk-body { background: #F8FAFC; min-height: 100vh; display: flex; flex-direction: column; }
 .desk-navbar { background: #0F172A; color: #FFFFFF; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; border-bottom: 2px solid var(--z-gold); position: sticky; top: 0; z-index: 999; }
+.desk-sidebar-toggle { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid #334155; border-radius: 8px; background: transparent; color: #FFFFFF; font-size: 20px; cursor: pointer; transition: var(--transition); }
+.desk-sidebar-toggle:hover, .desk-sidebar-toggle:focus-visible { background: #1E293B; border-color: var(--z-gold); outline: none; }
 .desk-navbar-brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 16px; color: #FFFFFF; }
 .desk-navbar-brand img { height: 30px; width: 30px; }
 .awesomebar-wrap { position: relative; width: 420px; }
@@ -58,6 +60,8 @@ a { text-decoration: none; color: inherit; }
 
 .desk-layout { display: flex; flex: 1; }
 .desk-sidebar { width: 260px; background: #FFFFFF; border-right: 1px solid var(--z-border); padding: 20px 0; display: flex; flex-direction: column; flex-shrink: 0; }
+.desk-layout.sidebar-collapsed .desk-sidebar { display: none; }
+.desk-layout.sidebar-collapsed .desk-main { max-width: 100%; }
 .desk-sidebar-title { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--z-slate); padding: 8px 24px; letter-spacing: 0.8px; display: flex; align-items: center; justify-content: space-between; }
 .desk-sidebar-link { display: flex; align-items: center; justify-content: space-between; padding: 9px 24px; font-size: 13.5px; font-weight: 600; color: #475569; border-left: 3px solid transparent; transition: var(--transition); }
 .desk-sidebar-link:hover { background: #F8FAFC; color: #0F172A; border-left-color: var(--z-border); }
@@ -174,6 +178,17 @@ a { text-decoration: none; color: inherit; }
 AWESOMEBAR_SCRIPT = """
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  const sidebarToggle = document.getElementById('desk-sidebar-toggle');
+  const deskLayout = document.querySelector('.desk-layout');
+  if (sidebarToggle && deskLayout) {
+    sidebarToggle.addEventListener('click', function() {
+      const collapsed = deskLayout.classList.toggle('sidebar-collapsed');
+      sidebarToggle.setAttribute('aria-expanded', String(!collapsed));
+      sidebarToggle.setAttribute('aria-label', collapsed ? 'Expand navigation' : 'Collapse navigation');
+      sidebarToggle.title = collapsed ? 'Expand navigation' : 'Collapse navigation';
+    });
+  }
+
   const bar = document.getElementById('awesomebar');
   if (!bar) return;
   
@@ -357,6 +372,7 @@ def render_desk_base(title: str, user: dict, content: str, active_tab: str = 'wo
 <body class="desk-body">
   <header class="desk-navbar">
     <div style="display: flex; align-items: center; gap: 30px;">
+      <button type="button" class="desk-sidebar-toggle" id="desk-sidebar-toggle" aria-label="Collapse navigation" aria-controls="desk-sidebar" aria-expanded="true" title="Collapse navigation">&#9776;</button>
       <a href="/desk" class="desk-navbar-brand">
         <img src="/public/images/z_logo.svg" alt="Logo">
         <div>ZUREKA <span>DESK</span></div>
@@ -380,7 +396,7 @@ def render_desk_base(title: str, user: dict, content: str, active_tab: str = 'wo
   </header>
 
   <div class="desk-layout">
-    <aside class="desk-sidebar">
+    <aside class="desk-sidebar" id="desk-sidebar">
       {sidebar_html}
       {sms_widget_html}
     </aside>
